@@ -1,262 +1,780 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AURA | Peptides — Conversor</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AURA | Peptides — Conversor</title>
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --bg2:#0f172a;
+      --card:#111318;
+      --line:#242a36;
+      --text:#eef2ff;
+      --muted:#a7b0c0;
+      --accent:#7dd3fc;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --shadow: 0 12px 35px rgba(0,0,0,.35);
+      --radius:18px;
+      --pad2:20px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    [data-theme="light"]{
+      --bg:#f6f7fb;
+      --bg2:#eef2ff;
+      --card:#ffffff;
+      --line:#e5e7eb;
+      --text:#0b1220;
+      --muted:#556072;
+      --accent:#2563eb;
+      --good:#16a34a;
+      --warn:#b45309;
+      --bad:#be123c;
+      --shadow: 0 14px 40px rgba(17,24,39,.10);
+    }
 
-<style>
-:root{
-  --bg:#0b0c10;
-  --card:#111318;
-  --line:#242a36;
-  --text:#eef2ff;
-  --muted:#a7b0c0;
-  --accent:#7dd3fc;
-  --good:#34d399;
-  --bad:#fb7185;
-}
-[data-theme="light"]{
-  --bg:#f6f7fb;
-  --card:#ffffff;
-  --line:#e5e7eb;
-  --text:#0b1220;
-  --muted:#556072;
-  --accent:#2563eb;
-  --good:#16a34a;
-  --bad:#be123c;
-}
-body{
-  margin:0;
-  font-family:system-ui;
-  background:var(--bg);
-  color:var(--text);
-}
-.wrap{max-width:1000px;margin:auto;padding:20px;}
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:20px;
-  margin-bottom:20px;
-}
-input,select{
-  width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:var(--bg);
-  color:var(--text);
-}
-button{
-  padding:10px 15px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:var(--card);
-  color:var(--text);
-  cursor:pointer;
-}
-.toggle{cursor:pointer;margin-bottom:15px}
-.alert{margin-top:10px;font-size:14px}
-.alert.good{color:var(--good)}
-.alert.bad{color:var(--bad)}
-</style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background: radial-gradient(1200px 650px at 18% 0%, var(--bg2) 0%, var(--bg) 60%);
+    }
+    .wrap{max-width:1020px;margin:0 auto;padding:26px 18px 30px;}
+    header{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+      margin-bottom:16px;
+    }
+    .brand{display:flex;flex-direction:column;gap:8px;}
+    .logoLine{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .logoImg{
+      width:54px;height:54px;border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 80%, transparent);
+      box-shadow: var(--shadow);
+      object-fit:contain;
+      padding:6px;
+    }
+    .title{margin:0;font-size:18px;letter-spacing:.4px;}
+    .sub{color:var(--muted);font-size:12.5px;line-height:1.35;max-width:720px;}
+    .topActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+    .chip{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      padding:9px 12px;border-radius:999px;
+      color:var(--muted);font-size:12px;box-shadow:var(--shadow);
+    }
+    .toggle{
+      display:inline-flex;align-items:center;gap:10px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      padding:10px 12px;border-radius:999px;
+      box-shadow:var(--shadow);
+      cursor:pointer;user-select:none;
+      font-size:12px;color:var(--muted);
+    }
+    .toggle .dot{
+      width:34px;height:18px;border-radius:999px;
+      background: color-mix(in srgb, var(--bg) 70%, var(--card));
+      border:1px solid var(--line);
+      position:relative;
+    }
+    .toggle .dot:after{
+      content:"";
+      position:absolute;top:50%;transform:translateY(-50%);
+      width:14px;height:14px;border-radius:50%;
+      left:2px;background: var(--accent);
+      transition: all .18s ease;
+    }
+    [data-theme="light"] .toggle .dot:after{ left:18px; }
+
+    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+    @media (max-width:930px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background: color-mix(in srgb, var(--card) 96%, transparent);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding:14px var(--pad2);
+      border-bottom:1px solid var(--line);
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .hd h2{margin:0;font-size:13px;color: color-mix(in srgb, var(--text) 88%, var(--muted));letter-spacing:.2px}
+    .bd{padding:var(--pad2)}
+
+    .section{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 10%, var(--card));
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+    .sectionTitle{
+      font-size:12px;
+      letter-spacing:.3px;
+      color:var(--text);
+      margin:0 0 10px 0;
+      text-transform:uppercase;
+      font-weight:800;
+    }
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:560px){.row{grid-template-columns:1fr}}
+
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 18%, var(--card));
+      color:var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{
+      border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+      box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
+
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+    button{
+      padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 90%, transparent);
+      color:var(--text);cursor:pointer;
+    }
+    button:hover{filter:brightness(1.03)}
+
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
+
+    .kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:560px){.kpis{grid-template-columns:1fr}}
+    .kpi{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 14%, var(--card));
+      border-radius:16px;
+      padding:12px 14px;
+    }
+    .kpi .t{font-size:12px;color:var(--muted)}
+    .kpi .v{font-size:18px;margin-top:4px}
+    .kpi .sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.3}
+
+    .alerts{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+    .alert{
+      border:1px solid var(--line);
+      border-left:4px solid var(--warn);
+      background: color-mix(in srgb, var(--warn) 10%, transparent);
+      padding:10px 12px;border-radius:12px;
+      font-size:12px;line-height:1.35;
+      color: color-mix(in srgb, var(--text) 85%, var(--muted));
+    }
+    .alert.bad{border-left-color:var(--bad);background: color-mix(in srgb, var(--bad) 9%, transparent)}
+    .alert.good{border-left-color:var(--good);background: color-mix(in srgb, var(--good) 9%, transparent)}
+
+    .syrWrap{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+    .syrCard{
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 14%, var(--card));
+      border-radius:16px;
+      padding:12px;
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 10%, var(--card));
+      padding:9px 10px;border-radius:999px;
+      font-size:12px;color:var(--muted);
+      margin:4px 0;
+    }
+    .pill strong{color:var(--text);font-weight:650}
+
+    .ruoBlock{
+      margin-top:12px;
+      border:1px dashed color-mix(in srgb, var(--line) 80%, transparent);
+      border-radius:14px;
+      padding:10px 12px;
+      background: color-mix(in srgb, var(--bg) 10%, var(--card));
+    }
+    .ruoBlock .ruoLine{
+      font-size:12px;line-height:1.35;margin:2px 0;
+      color: color-mix(in srgb, var(--text) 88%, var(--muted));
+    }
+    .ruoBlock .ruoLine strong{color:var(--text)}
+
+    footer{
+      margin-top:14px;
+      padding:14px 0 0;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .links{display:flex;gap:10px;flex-wrap:wrap}
+    .linkBtn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:9px 12px;border-radius:999px;
+      border:1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      color:var(--text);
+      text-decoration:none;
+      box-shadow:var(--shadow);
+    }
+    .linkBtn:hover{filter:brightness(1.03)}
+    .iconImg{width:18px;height:18px;object-fit:contain}
+  </style>
 </head>
 
 <body>
 <div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logoLine">
+        <img class="logoImg" src="logo-aura-vertical.png" alt="AURA | Peptides">
+        <div>
+          <h1 class="title">AURA | Peptides — Conversor</h1>
+          <div class="sub">
+            Ferramenta educativa de conversão: <span class="mono">mg ↔ mL ↔ UI</span>. Não define dose, apenas converte valores informados.
+          </div>
+        </div>
+      </div>
+    </div>
 
-<h2>AURA | Peptides — Conversor</h2>
-<div class="toggle" id="themeToggle">Alternar Tema</div>
+    <div class="topActions">
+      <div class="chip">MVP • sem backend • hospedagem estática</div>
+      <div class="toggle" id="themeToggle" title="Alternar modo claro/escuro">
+        <span>Modo</span><span class="dot"></span>
+      </div>
+    </div>
+  </header>
 
-<div class="card">
-<h3>Produto</h3>
+  <div class="grid">
+    <!-- ENTRADAS -->
+    <section class="card">
+      <div class="hd">
+        <h2>Entradas</h2>
+        <div class="mono" style="font-size:11px;color:var(--muted)">
+          UI = (dose_mg × diluição_mL ÷ vial_mg) × 100
+        </div>
+      </div>
+      <div class="bd">
 
-<select id="productSelect"></select>
-<select id="doseSelect"></select>
+        <div class="section">
+          <p class="sectionTitle">TIPO DE SERINGA</p>
+          <div class="row">
+            <div>
+              <label>Seringa</label>
+              <select id="syringeType">
+                <option value="u100-1">1,0 mL (100 UI)</option>
+                <option value="u100-0_5">0,5 mL (50 UI)</option>
+                <option value="u100-0_3">0,3 mL (30 UI)</option>
+              </select>
+              <div class="hint">A escala utilizada é baseada em 100 UI = 1 mL.</div>
+            </div>
+            <div></div>
+          </div>
+        </div>
 
-<label>Total no vial (mg)</label>
-<input id="vialMg" type="number" step="0.01" value="10">
+        <div class="section">
+          <p class="sectionTitle">DOSE DESEJADA</p>
+          <div class="row">
+            <div>
+              <label>Valor</label>
+              <input id="doseValue" type="number" step="0.01" min="0" value="0.25" />
+            </div>
+            <div>
+              <label>Unidade</label>
+              <select id="doseUnit">
+                <option value="mg">mg</option>
+                <option value="mcg">mcg</option>
+                <option value="ui">UI</option>
+              </select>
+              <div class="hint">Se escolher <strong>UI</strong>, o sistema calcula o equivalente em mg para esta diluição.</div>
+            </div>
+          </div>
+        </div>
 
-<label>Diluição (mL)</label>
-<input id="dilutionMl" type="number" step="0.01" value="2">
+        <div class="section">
+          <p class="sectionTitle">DOSAGEM PEPTÍDEO</p>
+          <div class="row">
+            <div>
+              <label>Produto</label>
+              <select id="preset">
+                <option value="custom">Personalizado</option>
+                <option value="BPC-157_10">BPC-157 (10 mg)</option>
+                <option value="GHK-Cu_100">GHK-Cu (100 mg)</option>
+                <option value="HGHFrag_10">HGH Fragment 176–191 (10 mg)</option>
+                <option value="TB500_5">TB-500 (5 mg)</option>
+                <option value="Retatrutide_60">Retatrutida (60 mg)</option>
+                <option value="Tirzepatide_60">Tirzepatida (60 mg)</option>
+              </select>
+              <div class="hint">Selecionando um produto, o total do vial é preenchido automaticamente.</div>
+            </div>
 
-<label>Dose</label>
-<input id="doseValue" type="number" step="0.01" value="0.25">
+            <div>
+              <label>Total no vial (mg)</label>
+              <input id="vialMg" type="number" step="0.01" min="0" value="10" />
+              <div class="hint">Quantidade total do peptídeo no frasco, em <strong>mg</strong>.</div>
+            </div>
+          </div>
+        </div>
 
-<select id="doseUnit">
-<option value="mg">mg</option>
-<option value="mcg">mcg</option>
-<option value="ui">UI</option>
-</select>
+        <div class="section">
+          <p class="sectionTitle">DILUIÇÃO</p>
+          <div class="row">
+            <div>
+              <label>Modo</label>
+              <select id="dilutionMode">
+                <option value="preset" selected>Padrão</option>
+                <option value="custom">Personalizado</option>
+              </select>
+              <div class="hint">Escolha “Personalizado” para informar qualquer volume (mL).</div>
+            </div>
 
-<label>Arredondar UI</label>
-<select id="rounding">
-<option value="2">2 UI</option>
-<option value="1">1 UI</option>
-<option value="0">Sem arredondamento</option>
-</select>
+            <div id="dilutionPresetWrap">
+              <label>Selecionar volume (mL)</label>
+              <select id="dilutionMlPreset">
+                <option value="2">2 mL</option>
+                <option value="2.5">2,5 mL</option>
+                <option value="3">3 mL</option>
+              </select>
+            </div>
 
-<button id="copyLinkBtn">Copiar link</button>
-<button id="resetBtn">Reset</button>
-</div>
+            <div id="dilutionCustomWrap" style="display:none">
+              <label>Volume (mL)</label>
+              <input id="dilutionMlCustom" type="number" step="0.01" min="0" value="2.0" />
+              <div class="hint">Ex.: 1,8 • 2,2 • 2,75 (mL).</div>
+            </div>
+          </div>
 
-<div class="card">
-<h3>Resultado</h3>
-<div id="uiExact">—</div>
-<div id="uiShown">—</div>
-<div id="mlShown">—</div>
-<div id="alerts"></div>
-</div>
+          <div class="row" style="margin-top:12px">
+            <div>
+              <label>Arredondamento (AURA)</label>
+              <select id="rounding">
+                <option value="2">Arredondar para 2 UI</option>
+                <option value="1">Arredondar para 1 UI</option>
+                <option value="0">Não arredondar</option>
+              </select>
+              <div class="hint">Recomendado: <strong>2 UI</strong> (seringas com traços de 2 em 2).</div>
+            </div>
+            <div>
+              <label>Regra de empate</label>
+              <select id="tieRule">
+                <option value="up">Empate → arredonda para cima</option>
+                <option value="down">Empate → arredonda para baixo</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
+        <div class="section">
+          <p class="sectionTitle">AÇÕES</p>
+          <div class="btnrow">
+            <button id="copyLinkBtn">Copiar link</button>
+            <button id="resetBtn">Reset</button>
+          </div>
+          <div class="hint">Use o “Copiar link” para criar QR com parâmetros (produto, diluição e modo claro/escuro).</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RESULTADO -->
+    <section class="card">
+      <div class="hd"><h2>Resultado</h2></div>
+      <div class="bd">
+        <div class="kpis">
+          <div class="kpi">
+            <div class="t">UI — exato</div>
+            <div class="v" id="uiExact">—</div>
+            <div class="sub" id="uiExactSub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="t">UI — exibido</div>
+            <div class="v" id="uiShown">—</div>
+            <div class="sub" id="uiShownSub">—</div>
+          </div>
+        </div>
+
+        <div class="alerts" id="alerts"></div>
+
+        <div style="margin-top:14px" class="syrWrap">
+          <div class="syrCard">
+            <div class="sectionTitle" style="margin:0 0 10px 0;font-weight:800">
+              <strong>SERINGA (VISUAL)</strong>
+            </div> 
+
+            <svg id="syringeSvg" width="250" height="460" viewBox="0 0 250 460" role="img" aria-label="Seringa">
+              <rect x="0" y="0" width="250" height="460" fill="transparent"/>
+
+              <!-- Finger support: thinner and TOUCHING the barrel (no gap) -->
+              <!-- Barrel starts at y=112, so support ends at 112 -->
+              <rect x="70" y="94" width="110" height="18" rx="9"
+                    fill="none" stroke="currentColor" stroke-width="2.3" opacity="0.95"/>
+
+              <!-- Plunger head (menor e proporcional) -->
+              <rect x="104" y="12" width="42" height="30" rx="6"
+                    fill="none" stroke="currentColor" stroke-width="2.2" opacity="0.95"/>
+
+              <!-- Plunger rod (encostando nas abas, mais fina) -->
+              <rect x="121" y="42" width="8" height="52" rx="4"
+                    fill="none" stroke="currentColor" stroke-width="2" opacity="0.95"/>
+
+
+
+              <!-- Barrel -->
+              <rect x="78" y="112" width="94" height="280" rx="16"
+                    fill="none" stroke="currentColor" stroke-width="2.6" opacity="0.95"/>
+
+              <clipPath id="barrelClip">
+                <rect x="86" y="120" width="78" height="264" rx="12"/>
+              </clipPath>
+
+              <rect id="liquid" x="86" y="384" width="78" height="0"
+                    fill="var(--accent)" opacity="0.65" clip-path="url(#barrelClip)"/>
+
+              <!-- Needle hub -->
+              <rect x="108" y="392" width="34" height="16" rx="6"
+                    fill="none" stroke="currentColor" stroke-width="2.6" opacity="0.95"/>
+              <!-- Needle -->
+              <line x1="125" y1="408" x2="125" y2="440" stroke="currentColor" stroke-width="2.6" opacity="0.95"/>
+              <polygon points="125,448 117,436 133,436" fill="currentColor" opacity="0.95"/>
+
+              <!-- Ticks -->
+              <g id="ticks"></g>
+
+              <text id="plungerLabel" x="125" y="0" text-anchor="middle" fill="var(--good)" font-size="12" opacity="0.95">
+                Base do êmbolo
+              </text>
+
+              <line id="plungerBase" x1="78" y1="384" x2="172" y2="384"
+                    stroke="var(--good)" stroke-width="3" opacity="0.95"/>
+            </svg>
+
+            <div class="hint">A leitura deve ser feita pela <strong>base do êmbolo</strong>.</div>
+          </div>
+
+          <div class="syrCard" style="min-width:280px;flex:1">
+            <div class="sectionTitle" style="margin:0 0 10px 0;font-weight:800">
+              <strong>RESUMO</strong>
+            </div>
+
+            <div class="pill"><span>Vial</span> <strong id="sumVial">—</strong></div><br/>
+            <div class="pill"><span>Diluição</span> <strong id="sumDil">—</strong></div><br/>
+            <div class="pill"><span>Dose</span> <strong id="sumDose">—</strong></div>
+
+            <div style="height:10px"></div>
+
+            <div class="pill"><span>Aspire até</span> <strong id="sumAspire">—</strong></div>
+            <div class="hint" id="roundingNote"></div>
+
+            <div class="ruoBlock">
+              <div class="ruoLine"><strong>RUO:</strong> Research Use Only.</div>
+              <div class="ruoLine">Not for human or veterinary use.</div>
+              <div class="ruoLine">Este conversor é educativo e não substitui orientação profissional.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div>© AURA | Peptides</div>
+    <div class="links">
+      <a class="linkBtn" href="https://instagram.com/aura_peptides" target="_blank" rel="noopener">
+        <img class="iconImg" src="instagram.png" alt="Instagram"> Instagram
+      </a>
+      <a class="linkBtn" href="https://wa.me/5511973616286" target="_blank" rel="noopener">
+        <img class="iconImg" src="4d5de593-cd24-43a1-b73b-273dabd7690d.png" alt="WhatsApp"> WhatsApp
+      </a>
+      <a class="linkBtn" href="mailto:peptides.aura@gmail.com">
+        <img class="iconImg" src="maildotru.png" alt="E-mail"> E-mail
+      </a>
+    </div>
+  </footer>
 </div>
 
 <script>
+  const qs = (id)=>document.getElementById(id);
+  const toNum = (v)=> Number(String(v).replace(',', '.'));
+  const fmt = (n, d=2)=> (Number.isFinite(n) ? n.toFixed(d).replace('.', ',') : '—');
 
-const qs=id=>document.getElementById(id);
-
-const PEPTIDES={
-"BPC-157":["2 MG","5 MG","10 MG"],
-"TB-500":["2 MG","5 MG","10 MG"],
-"Retatrutide":["10 MG","20 MG","60 MG"],
-"Tirzepatide":["5 MG","10 MG","60 MG"],
-"Semaglutide":["2 MG","5 MG","10 MG"]
-};
-
-function populateProducts(){
-  const sel=qs("productSelect");
-  sel.innerHTML="";
-  Object.keys(PEPTIDES).forEach(p=>{
-    const opt=document.createElement("option");
-    opt.value=p;
-    opt.textContent=p;
-    sel.appendChild(opt);
-  });
-}
-
-function populateDoses(product){
-  const sel=qs("doseSelect");
-  sel.innerHTML="";
-  PEPTIDES[product].forEach(d=>{
-    const opt=document.createElement("option");
-    opt.value=d;
-    opt.textContent=d;
-    sel.appendChild(opt);
-  });
-  setDoseValue();
-}
-
-function setDoseValue(){
-  const dose=qs("doseSelect").value;
-  const numeric=parseFloat(dose.replace(/[^\d.]/g,""));
-  qs("vialMg").value=numeric;
-  update();
-}
-
-function roundUI(value,step){
-  if(step==0)return value;
-  return Math.round(value/step)*step;
-}
-
-function update(){
-  const vialMg=parseFloat(qs("vialMg").value);
-  const dilution=parseFloat(qs("dilutionMl").value);
-  const dose=parseFloat(qs("doseValue").value);
-  const unit=qs("doseUnit").value;
-  const rounding=parseFloat(qs("rounding").value);
-
-  const alerts=qs("alerts");
-  alerts.innerHTML="";
-
-  if(!vialMg||!dilution||!dose){
-    qs("uiExact").textContent="—";
-    qs("uiShown").textContent="—";
-    qs("mlShown").textContent="—";
-    return;
+  function syringeMaxUI(type){
+    if(type==='u100-0_3') return 30;
+    if(type==='u100-0_5') return 50;
+    return 100;
+  }
+  function roundToStep(value, step, tieRule){
+    if(step===0) return value;
+    const inv = value/step;
+    const lower = Math.floor(inv)*step;
+    const upper = Math.ceil(inv)*step;
+    const dl = Math.abs(value - lower);
+    const du = Math.abs(upper - value);
+    if(dl < du) return lower;
+    if(du < dl) return upper;
+    return tieRule === 'down' ? lower : upper;
   }
 
-  let doseMg;
-  if(unit==="mg") doseMg=dose;
-  else if(unit==="mcg") doseMg=dose/1000;
-  else doseMg=(dose/100)*(vialMg/dilution);
-
-  const uiExact=(doseMg*dilution/vialMg)*100;
-  const uiShown=roundUI(uiExact,rounding);
-  const mlShown=uiShown/100;
-
-  qs("uiExact").textContent=`Exato: ${uiExact.toFixed(2)} UI`;
-  qs("uiShown").textContent=`Exibido: ${uiShown.toFixed(0)} UI`;
-  qs("mlShown").textContent=`Equivale a ${mlShown.toFixed(3)} mL`;
-
-  if(doseMg>vialMg){
-    alerts.innerHTML='<div class="alert bad">Dose maior que conteúdo do vial.</div>';
-  }else{
-    alerts.innerHTML='<div class="alert good">Conversão válida.</div>';
+  function getDilutionMl(){
+    const mode = qs('dilutionMode').value;
+    if(mode === 'custom') return toNum(qs('dilutionMlCustom').value);
+    return toNum(qs('dilutionMlPreset').value);
   }
-}
 
-function copyLink(){
-  const params=new URLSearchParams({
-    v:qs("vialMg").value,
-    d:qs("dilutionMl").value,
-    dose:qs("doseValue").value,
-    u:qs("doseUnit").value,
-    r:qs("rounding").value,
-    theme:document.documentElement.getAttribute("data-theme")||"dark"
+  function setPreset(){
+    const p = qs('preset').value;
+    const map = {
+      'BPC-157_10': 10,
+      'GHK-Cu_100': 100,
+      'HGHFrag_10': 10,
+      'TB500_5': 5,
+      'Retatrutide_60': 60,
+      'Tirzepatide_60': 60
+    };
+    if(map[p]) qs('vialMg').value = map[p];
+    update();
+  }
+
+  function buildTicks(maxUI){
+    const g = qs('ticks');
+    g.innerHTML = '';
+    const topY = 120, bottomY = 384;
+    const height = bottomY - topY;
+
+    for(let ui=0; ui<=maxUI; ui+=2){
+      const y = bottomY - (ui/maxUI)*height;
+      const isMajor = (ui % 10 === 0);
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+      line.setAttribute('x1', isMajor ? 64 : 68);
+      line.setAttribute('x2', 78);
+      line.setAttribute('y1', y);
+      line.setAttribute('y2', y);
+      line.setAttribute('stroke', 'currentColor');
+      line.setAttribute('opacity', isMajor ? '0.75' : '0.40');
+      line.setAttribute('stroke-width', isMajor ? '2.0' : '1.2');
+      g.appendChild(line);
+
+      if(isMajor){
+        const text = document.createElementNS("http://www.w3.org/2000/svg","text");
+        text.setAttribute('x', 58);
+        text.setAttribute('y', y+4);
+        text.setAttribute('text-anchor', 'end');
+        text.setAttribute('fill', 'currentColor');
+        text.setAttribute('opacity', '0.55');
+        text.setAttribute('font-size', '11');
+        text.textContent = ui;
+        g.appendChild(text);
+      }
+    }
+  }
+
+  function setSyringe(ui, maxUI){
+    buildTicks(maxUI);
+    const topY = 120, bottomY = 384;
+    const height = bottomY - topY;
+
+    const u = Math.max(0, Math.min(ui, maxUI));
+    const fillH = (u/maxUI) * height;
+    const y = bottomY - fillH;
+
+    qs('liquid').setAttribute('y', y);
+    qs('liquid').setAttribute('height', fillH);
+
+    qs('plungerBase').setAttribute('y1', y);
+    qs('plungerBase').setAttribute('y2', y);
+
+    qs('plungerLabel').setAttribute('y', y - 8);
+  }
+
+  function update(){
+    const vialMg = toNum(qs('vialMg').value);
+    const dilutionMl = getDilutionMl();
+    const doseValue = toNum(qs('doseValue').value);
+    const doseUnit = qs('doseUnit').value;
+    const rounding = toNum(qs('rounding').value);
+    const tieRule = qs('tieRule').value;
+    const syringeType = qs('syringeType').value;
+
+    const alerts = qs('alerts');
+    alerts.innerHTML = '';
+
+    if(!(vialMg>0) || !(dilutionMl>0) || !(doseValue>0)){
+      qs('uiExact').textContent = '—';
+      qs('uiShown').textContent = '—';
+      qs('uiExactSub').textContent = 'Preencha os campos para calcular.';
+      qs('uiShownSub').textContent = '';
+      qs('sumVial').textContent = '—';
+      qs('sumDil').textContent = '—';
+      qs('sumDose').textContent = '—';
+      qs('sumAspire').textContent = '—';
+      qs('roundingNote').textContent = '';
+      setSyringe(0, syringeMaxUI(syringeType));
+      return;
+    }
+
+    let doseMg;
+    let uiExact;
+
+    if(doseUnit === 'ui'){
+      uiExact = doseValue;
+      const ml = uiExact / 100;
+      const conc = vialMg / dilutionMl;
+      doseMg = ml * conc;
+    } else {
+      doseMg = (doseUnit === 'mcg') ? doseValue/1000 : doseValue;
+      uiExact = (doseMg * dilutionMl / vialMg) * 100;
+    }
+
+    const mlExact = uiExact / 100;
+    const uiShown = (rounding===0) ? uiExact : roundToStep(uiExact, rounding, tieRule);
+    const mlShown = uiShown / 100;
+
+    qs('uiExact').textContent = `${fmt(uiExact,2)} UI`;
+    qs('uiExactSub').textContent = `Equivale a ${fmt(mlExact,3)} mL`;
+
+    qs('uiShown').textContent = `${fmt(uiShown,0)} UI`;
+    qs('uiShownSub').textContent = `Equivale a ${fmt(mlShown,3)} mL`;
+
+    qs('sumVial').textContent = `${fmt(vialMg,2)} mg`;
+    qs('sumDil').textContent = `${fmt(dilutionMl,2)} mL`;
+
+    if(doseUnit === 'ui'){
+      qs('sumDose').textContent = `${fmt(doseValue,0)} UI (${fmt(doseMg,4)} mg)`;
+    } else {
+      qs('sumDose').textContent = `${fmt(doseMg,4)} mg (${fmt(doseMg*1000,0)} mcg)`;
+    }
+    qs('sumAspire').textContent = `${fmt(uiShown,0)} UI`;
+
+    qs('roundingNote').textContent =
+      (rounding===0)
+        ? 'Exibindo valor exato (sem arredondamento).'
+        : `Valor exibido arredondado para ${rounding} UI (empate → ${tieRule==='up'?'cima':'baixo'}).`;
+
+    const maxUI = syringeMaxUI(syringeType);
+
+    const arr = [];
+    if(doseMg > vialMg){
+      arr.push({type:'bad', msg:'Dose calculada (mg) é maior que o conteúdo total do vial. Verifique os campos.'});
+    }
+    if(uiShown > maxUI){
+      arr.push({type:'bad', msg:`Resultado (${fmt(uiShown,0)} UI) excede a capacidade da seringa selecionada (${maxUI} UI).`});
+    } else {
+      arr.push({type:'good', msg:`Compatível com a seringa selecionada: ${maxUI} UI.`});
+    }
+    arr.push({type:'', msg:'Este conversor realiza apenas conversão de unidades. Não define dosagens.'});
+
+    for(const item of arr){
+      const div = document.createElement('div');
+      div.className = 'alert' + (item.type ? ' ' + item.type : '');
+      div.textContent = item.msg;
+      alerts.appendChild(div);
+    }
+
+    setSyringe(uiShown, maxUI);
+  }
+
+  function onDilutionModeChange(){
+    const mode = qs('dilutionMode').value;
+    document.getElementById('dilutionPresetWrap').style.display = (mode==='preset') ? '' : 'none';
+    document.getElementById('dilutionCustomWrap').style.display = (mode==='custom') ? '' : 'none';
+    update();
+  }
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('aura_theme', theme);
+  }
+  function initTheme(){
+    const saved = localStorage.getItem('aura_theme');
+    setTheme(saved || 'dark');
+  }
+
+  function copyLinkWithParams(){
+    const params = new URLSearchParams();
+    params.set('p', qs('preset').value);
+    params.set('v', qs('vialMg').value);
+    params.set('dm', qs('dilutionMode').value);
+    params.set('dp', qs('dilutionMlPreset').value);
+    params.set('dc', qs('dilutionMlCustom').value);
+    params.set('dose', qs('doseValue').value);
+    params.set('u', qs('doseUnit').value);
+    params.set('s', qs('syringeType').value);
+    params.set('r', qs('rounding').value);
+    params.set('t', qs('tieRule').value);
+    params.set('theme', document.documentElement.getAttribute('data-theme') || 'dark');
+
+    const url = `${location.origin}${location.pathname}?${params.toString()}`;
+    navigator.clipboard.writeText(url).then(()=> alert('Link copiado.'))
+      .catch(()=> prompt('Copie o link:', url));
+  }
+
+  function applyUrlParams(){
+    const params = new URLSearchParams(window.location.search);
+    const theme = params.get('theme');
+    if(theme) setTheme(theme);
+
+    const syr = params.get('s'); if(syr) qs('syringeType').value = syr;
+    const p = params.get('p'); if(p) qs('preset').value = p;
+    const v = params.get('v'); if(v) qs('vialMg').value = v;
+
+    const dm = params.get('dm'); if(dm) qs('dilutionMode').value = dm;
+    const dp = params.get('dp'); if(dp) qs('dilutionMlPreset').value = dp;
+    const dc = params.get('dc'); if(dc) qs('dilutionMlCustom').value = dc;
+    onDilutionModeChange();
+
+    const dose = params.get('dose'); if(dose) qs('doseValue').value = dose;
+    const unit = params.get('u'); if(unit) qs('doseUnit').value = unit;
+    const r = params.get('r'); if(r) qs('rounding').value = r;
+    const tie = params.get('t'); if(tie) qs('tieRule').value = tie;
+
+    setPreset();
+  }
+
+  function resetAll(){
+    qs('syringeType').value = 'u100-1';
+    qs('doseValue').value = 0.25;
+    qs('doseUnit').value = 'mg';
+    qs('preset').value = 'BPC-157_10';
+    qs('vialMg').value = 10;
+
+    qs('dilutionMode').value = 'preset';
+    qs('dilutionMlPreset').value = 2;
+    qs('dilutionMlCustom').value = 2.0;
+    onDilutionModeChange();
+
+    qs('rounding').value = 2;
+    qs('tieRule').value = 'up';
+    setPreset();
+  }
+
+  ['syringeType','doseValue','doseUnit','preset','vialMg','dilutionMlPreset','dilutionMlCustom','rounding','tieRule']
+    .forEach(id => qs(id).addEventListener('input', id==='preset'?setPreset:update));
+
+  qs('dilutionMode').addEventListener('change', onDilutionModeChange);
+  qs('copyLinkBtn').addEventListener('click', copyLinkWithParams);
+  qs('resetBtn').addEventListener('click', resetAll);
+
+  qs('themeToggle').addEventListener('click', ()=>{
+    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    setTheme(cur === 'dark' ? 'light' : 'dark');
   });
-  const url=location.origin+location.pathname+"?"+params.toString();
-  navigator.clipboard.writeText(url);
-  alert("Link copiado");
-}
 
-function applyParams(){
-  const p=new URLSearchParams(location.search);
-  if(p.get("v")) qs("vialMg").value=p.get("v");
-  if(p.get("d")) qs("dilutionMl").value=p.get("d");
-  if(p.get("dose")) qs("doseValue").value=p.get("dose");
-  if(p.get("u")) qs("doseUnit").value=p.get("u");
-  if(p.get("r")) qs("rounding").value=p.get("r");
-  if(p.get("theme")) setTheme(p.get("theme"));
-}
-
-function resetAll(){
-  qs("vialMg").value=10;
-  qs("dilutionMl").value=2;
-  qs("doseValue").value=0.25;
-  qs("doseUnit").value="mg";
-  qs("rounding").value=2;
+  initTheme();
+  applyUrlParams();
   update();
-}
-
-function setTheme(theme){
-  document.documentElement.setAttribute("data-theme",theme);
-  localStorage.setItem("theme",theme);
-}
-
-function initTheme(){
-  const saved=localStorage.getItem("theme")||"dark";
-  setTheme(saved);
-}
-
-qs("productSelect").addEventListener("change",e=>populateDoses(e.target.value));
-qs("doseSelect").addEventListener("change",setDoseValue);
-["vialMg","dilutionMl","doseValue","doseUnit","rounding"]
-.forEach(id=>qs(id).addEventListener("input",update));
-
-qs("copyLinkBtn").addEventListener("click",copyLink);
-qs("resetBtn").addEventListener("click",resetAll);
-qs("themeToggle").addEventListener("click",()=>{
-  const current=document.documentElement.getAttribute("data-theme");
-  setTheme(current==="dark"?"light":"dark");
-});
-
-populateProducts();
-populateDoses("BPC-157");
-initTheme();
-applyParams();
-update();
-
 </script>
 </body>
 </html>
