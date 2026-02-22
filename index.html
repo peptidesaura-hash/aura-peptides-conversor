@@ -13,6 +13,8 @@
   --text:#eef2ff;
   --muted:#a7b0c0;
   --accent:#7dd3fc;
+  --good:#34d399;
+  --bad:#fb7185;
 }
 [data-theme="light"]{
   --bg:#f6f7fb;
@@ -21,6 +23,8 @@
   --text:#0b1220;
   --muted:#556072;
   --accent:#2563eb;
+  --good:#16a34a;
+  --bad:#be123c;
 }
 body{
   margin:0;
@@ -28,7 +32,7 @@ body{
   background:var(--bg);
   color:var(--text);
 }
-.wrap{max-width:900px;margin:auto;padding:20px;}
+.wrap{max-width:1000px;margin:auto;padding:20px;}
 .card{
   background:var(--card);
   border:1px solid var(--line);
@@ -53,14 +57,10 @@ button{
   color:var(--text);
   cursor:pointer;
 }
-.kpi{
-  font-size:22px;
-  margin:10px 0;
-}
-.toggle{
-  cursor:pointer;
-  margin-bottom:15px;
-}
+.toggle{cursor:pointer;margin-bottom:15px}
+.alert{margin-top:10px;font-size:14px}
+.alert.good{color:var(--good)}
+.alert.bad{color:var(--bad)}
 </style>
 </head>
 
@@ -72,22 +72,30 @@ button{
 
 <div class="card">
 <h3>Produto</h3>
+
 <select id="productSelect"></select>
 <select id="doseSelect"></select>
 
 <label>Total no vial (mg)</label>
-<input id="vialMg" type="number" value="10" step="0.01">
+<input id="vialMg" type="number" step="0.01" value="10">
 
 <label>Diluição (mL)</label>
-<input id="dilutionMl" type="number" value="2" step="0.01">
+<input id="dilutionMl" type="number" step="0.01" value="2">
 
 <label>Dose</label>
-<input id="doseValue" type="number" value="0.25" step="0.01">
+<input id="doseValue" type="number" step="0.01" value="0.25">
 
 <select id="doseUnit">
 <option value="mg">mg</option>
 <option value="mcg">mcg</option>
 <option value="ui">UI</option>
+</select>
+
+<label>Arredondar UI</label>
+<select id="rounding">
+<option value="2">2 UI</option>
+<option value="1">1 UI</option>
+<option value="0">Sem arredondamento</option>
 </select>
 
 <button id="copyLinkBtn">Copiar link</button>
@@ -96,17 +104,19 @@ button{
 
 <div class="card">
 <h3>Resultado</h3>
-<div class="kpi" id="uiExact">—</div>
-<div class="kpi" id="mlExact">—</div>
+<div id="uiExact">—</div>
+<div id="uiShown">—</div>
+<div id="mlShown">—</div>
+<div id="alerts"></div>
 </div>
 
 </div>
 
 <script>
 
-const qs = id => document.getElementById(id);
+const qs=id=>document.getElementById(id);
 
-const PEPTIDES = {
+const PEPTIDES={
 "BPC-157":["2 MG","5 MG","10 MG"],
 "TB-500":["2 MG","5 MG","10 MG"],
 "Retatrutide":["10 MG","20 MG","60 MG"],
@@ -115,7 +125,7 @@ const PEPTIDES = {
 };
 
 function populateProducts(){
-  const sel = qs("productSelect");
+  const sel=qs("productSelect");
   sel.innerHTML="";
   Object.keys(PEPTIDES).forEach(p=>{
     const opt=document.createElement("option");
@@ -144,15 +154,25 @@ function setDoseValue(){
   update();
 }
 
+function roundUI(value,step){
+  if(step==0)return value;
+  return Math.round(value/step)*step;
+}
+
 function update(){
   const vialMg=parseFloat(qs("vialMg").value);
   const dilution=parseFloat(qs("dilutionMl").value);
   const dose=parseFloat(qs("doseValue").value);
   const unit=qs("doseUnit").value;
+  const rounding=parseFloat(qs("rounding").value);
+
+  const alerts=qs("alerts");
+  alerts.innerHTML="";
 
   if(!vialMg||!dilution||!dose){
     qs("uiExact").textContent="—";
-    qs("mlExact").textContent="—";
+    qs("uiShown").textContent="—";
+    qs("mlShown").textContent="—";
     return;
   }
 
@@ -161,11 +181,19 @@ function update(){
   else if(unit==="mcg") doseMg=dose/1000;
   else doseMg=(dose/100)*(vialMg/dilution);
 
-  const ui=(doseMg*dilution/vialMg)*100;
-  const ml=ui/100;
+  const uiExact=(doseMg*dilution/vialMg)*100;
+  const uiShown=roundUI(uiExact,rounding);
+  const mlShown=uiShown/100;
 
-  qs("uiExact").textContent=`${ui.toFixed(2)} UI`;
-  qs("mlExact").textContent=`${ml.toFixed(3)} mL`;
+  qs("uiExact").textContent=`Exato: ${uiExact.toFixed(2)} UI`;
+  qs("uiShown").textContent=`Exibido: ${uiShown.toFixed(0)} UI`;
+  qs("mlShown").textContent=`Equivale a ${mlShown.toFixed(3)} mL`;
+
+  if(doseMg>vialMg){
+    alerts.innerHTML='<div class="alert bad">Dose maior que conteúdo do vial.</div>';
+  }else{
+    alerts.innerHTML='<div class="alert good">Conversão válida.</div>';
+  }
 }
 
 function copyLink(){
@@ -173,19 +201,13 @@ function copyLink(){
     v:qs("vialMg").value,
     d:qs("dilutionMl").value,
     dose:qs("doseValue").value,
-    u:qs("doseUnit").value
+    u:qs("doseUnit").value,
+    r:qs("rounding").value,
+    theme:document.documentElement.getAttribute("data-theme")||"dark"
   });
   const url=location.origin+location.pathname+"?"+params.toString();
   navigator.clipboard.writeText(url);
   alert("Link copiado");
-}
-
-function resetAll(){
-  qs("vialMg").value=10;
-  qs("dilutionMl").value=2;
-  qs("doseValue").value=0.25;
-  qs("doseUnit").value="mg";
-  update();
 }
 
 function applyParams(){
@@ -194,6 +216,17 @@ function applyParams(){
   if(p.get("d")) qs("dilutionMl").value=p.get("d");
   if(p.get("dose")) qs("doseValue").value=p.get("dose");
   if(p.get("u")) qs("doseUnit").value=p.get("u");
+  if(p.get("r")) qs("rounding").value=p.get("r");
+  if(p.get("theme")) setTheme(p.get("theme"));
+}
+
+function resetAll(){
+  qs("vialMg").value=10;
+  qs("dilutionMl").value=2;
+  qs("doseValue").value=0.25;
+  qs("doseUnit").value="mg";
+  qs("rounding").value=2;
+  update();
 }
 
 function setTheme(theme){
@@ -208,10 +241,9 @@ function initTheme(){
 
 qs("productSelect").addEventListener("change",e=>populateDoses(e.target.value));
 qs("doseSelect").addEventListener("change",setDoseValue);
-qs("vialMg").addEventListener("input",update);
-qs("dilutionMl").addEventListener("input",update);
-qs("doseValue").addEventListener("input",update);
-qs("doseUnit").addEventListener("change",update);
+["vialMg","dilutionMl","doseValue","doseUnit","rounding"]
+.forEach(id=>qs(id).addEventListener("input",update));
+
 qs("copyLinkBtn").addEventListener("click",copyLink);
 qs("resetBtn").addEventListener("click",resetAll);
 qs("themeToggle").addEventListener("click",()=>{
