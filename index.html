@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AURA | Peptides — Conversor</title>
+  
   <style>
     :root{
       --bg: #0b0c10;
@@ -510,6 +511,61 @@
   const toNum = (v)=> Number(String(v).replace(',', '.'));
   const fmt = (n, d=2)=> (Number.isFinite(n) ? n.toFixed(d).replace('.', ',') : '—');
 
+  const PRESETS = {
+    "5-Amino-1MQ":["5 MG","10 MG","50 MG"],
+    "ACE-031":["1 MG"],
+    "Acetic Acid":["3 ML"],
+    "Adamax":["5 MG","10 MG"],
+    "Adipotide":["2 MG","5 MG","10 MG"],
+    "AHK-CU":["100 MG"],
+    "AICAR":["50 MG","100 MG"],
+    "Alprostadil":["20 MCG"],
+    "AOD-9604":["2 MG","5 MG","10 MG"],
+    "ARA-290":["5 MG","10 MG"],
+    "BPC-157":["2 MG","5 MG","10 MG","15 MG","20 MG","50 MG","70 MG","80 MG"],
+    "Cagrilintide":["2 MG","5 MG","10 MG","20 MG"],
+    "CJC-1295 (no DAC)":["2 MG","5 MG","10 MG"],
+    "CJC-1295 (with DAC)":["2 MG","5 MG","10 MG"],
+    "DSIP":["2 MG","5 MG","10 MG","12 MG","15 MG"],
+    "Dulaglutide":["5 MG","10 MG"],
+    "Epithalon":["5 MG","10 MG","40 MG","50 MG"],
+    "EPO":["3000 IU","5000 IU"],
+    "GHK-Cu":["10 MG","50 MG","100 MG"],
+    "GHRP-2":["5 MG","10 MG","15 MG"],
+    "GHRP-6":["5 MG","10 MG"],
+    "HCG":["1000 IU","2000 IU","5000 IU","10000 IU"],
+    "Hexarelin":["2 MG","5 MG","10 MG"],
+    "HGH (191AA)":["6 IU","8 IU","10 IU","12 IU","15 IU","24 IU","36 IU","40 IU","50 IU"],
+    "HGH Fragment 176-191":["1 MG","2 MG","5 MG","10 MG","12 MG","15 MG"],
+    "IGF-1 DES":["100 MCG"],
+    "IGF-1 LR3":["1 MG","100 MCG"],
+    "Ipamorelin":["2 MG","5 MG","10 MG"],
+    "KPV":["5 MG","10 MG"],
+    "Liraglutide":["5 MG","10 MG","30 MG"],
+    "LL-37":["5 MG","10 MG"],
+    "Mazdutide":["5 MG","10 MG","20 MG"],
+    "Melanotan I":["5 MG","10 MG"],
+    "Melanotan II":["5 MG","10 MG"],
+    "MOTS-C":["5 MG","10 MG","40 MG"],
+    "NAD+":["100 MG","500 MG","1000 MG"],
+    "Oxytocin":["2 MG","5 MG","10 MG"],
+    "PEG-MGF":["2 MG","10 MG"],
+    "Pramlintide":["5 MG","10 MG"],
+    "Retatrutide":["5 MG","10 MG","15 MG","20 MG","25 MG","30 MG","35 MG","40 MG","50 MG","60 MG","100 MG"],
+    "Semaglutide":["2 MG","5 MG","10 MG","15 MG","20 MG","30 MG","50 MG"],
+    "Semax":["5 MG","10 MG","30 MG"],
+    "Sermorelin":["2 MG","5 MG","10 MG","15 MG"],
+    "SLU-PP-332":["5 MG","10 MG"],
+    "SS-31":["5 MG","10 MG","25 MG","50 MG"],
+    "Survodutide":["5 MG","10 MG"],
+    "TB-500":["2 MG","5 MG","10 MG","20 MG"],
+    "Tesamorelin":["2 MG","5 MG","10 MG","15 MG","20 MG"],
+    "Thymosin Alpha-1":["2 MG","5 MG","10 MG","12 MG","15 MG"],
+    "Tirzepatide":["2 MG","5 MG","10 MG","15 MG","20 MG","30 MG","40 MG","45 MG","50 MG","60 MG","70 MG","80 MG","90 MG","100 MG","110 MG","120 MG"],
+    "VIP":["5 MG","10 MG"],
+    "Vitamin D3":["20000 IU"]
+  };
+
   function syringeMaxUI(type){
     if(type==='u100-0_3') return 30;
     if(type==='u100-0_5') return 50;
@@ -534,16 +590,25 @@
   }
 
   function setPreset(){
-    const p = qs('preset').value;
-    const map = {
-      'BPC-157_10': 10,
-      'GHK-Cu_100': 100,
-      'HGHFrag_10': 10,
-      'TB500_5': 5,
-      'Retatrutide_60': 60,
-      'Tirzepatide_60': 60
-    };
-    if(map[p]) qs('vialMg').value = map[p];
+    const val = qs('preset').value;
+  
+    if(val === 'custom'){
+      update();
+      return;
+    }
+  
+    const parts = val.split('|');
+    if(parts.length < 2) return;
+  
+    const doseStr = parts[1];
+    const numeric = Number(doseStr.replace(/[^\d.,]/g,'').replace(',','.'));
+  
+    if(doseStr.includes('MCG')){
+      qs('vialMg').value = numeric / 1000;
+    } else {
+      qs('vialMg').value = numeric;
+    }
+  
     update();
   }
 
@@ -760,6 +825,20 @@
     setPreset();
   }
 
+  function buildPresetOptions(){
+    const select = qs('preset');
+    select.innerHTML = '<option value="custom">Personalizado</option>';
+  
+    Object.keys(PRESETS).sort().forEach(name=>{
+      PRESETS[name].forEach(dose=>{
+        const opt = document.createElement('option');
+        opt.value = `${name}|${dose}`;
+        opt.textContent = `${name} (${dose})`;
+        select.appendChild(opt);
+      });
+    });
+  }
+
   ['syringeType','doseValue','doseUnit','preset','vialMg','dilutionMlPreset','dilutionMlCustom','rounding','tieRule']
     .forEach(id => qs(id).addEventListener('input', id==='preset'?setPreset:update));
 
@@ -773,8 +852,10 @@
   });
 
   initTheme();
+  buildPresetOptions();
   applyUrlParams();
   update();
 </script>
 </body>
 </html>
+
