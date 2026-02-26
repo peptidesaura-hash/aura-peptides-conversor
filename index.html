@@ -210,15 +210,19 @@
   }
 
   /* FILTER */
+  /* ── STICKY WRAPPER: section-nav + filter unified ── */
+  .sticky-ui{
+    position:sticky;top:60px;z-index:91;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  }
   /* ── SECTION NAV ── */
   .section-nav{
-    position:sticky;top:60px;z-index:91;
-    background:color-mix(in srgb,var(--bg) 92%,transparent);
-    border-bottom:1px solid var(--line);
-    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
     overflow-x:auto;white-space:nowrap;
     scrollbar-width:none;-ms-overflow-style:none;
     padding:0 24px;
+    border-bottom:1px solid color-mix(in srgb,var(--line) 50%,transparent);
   }
   .section-nav::-webkit-scrollbar{display:none}
   .section-nav-inner{
@@ -238,15 +242,10 @@
   .snav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
   .snav-icon{font-size:13px;line-height:1}
 
-  /* ── STICKY FILTER BAR ── */
+  /* ── FILTER BAR (inside sticky-ui, not separately sticky) ── */
   .filter-wrap{
-    position:sticky;top:106px;z-index:90;
-    background:color-mix(in srgb,var(--bg) 95%,transparent);
-    border-bottom:1px solid var(--line);
     padding:8px 24px;
     display:flex;align-items:center;gap:10px;
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
   }
   .filter-lbl{
     font-size:10px;text-transform:uppercase;
@@ -287,7 +286,7 @@
   .grid-label{
     font-family:var(--mono);font-size:10px;font-weight:600;
     letter-spacing:.15em;color:var(--dim);text-transform:uppercase;
-    margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);
+    margin-top:28px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);
   }
   .pgrid{
     display:grid;
@@ -505,15 +504,23 @@
 
   /* ── RESPONSIVE ── */
   @media(max-width:680px){
-    .nav-tab span{display:none}
-    .brand-sep{margin:0 12px}
+    /* Nav tabs — shrink but keep visible */
+    .nav-tab{padding:0 12px;font-size:11px}
+    .nav-tab span{font-size:11px}
+    .tab-icon{font-size:11px}
+    .brand-sep{margin:0 10px}
     .bar-right .theme-btn span:not(.t-dot){display:none}
     .hero h1{font-size:2rem}
     .hero-stats{gap:20px}
-    .section-nav{top:52px}
-    .filter-wrap{top:94px;padding:8px 14px;gap:8px}
-    .search-box{margin-left:0;width:100%}
-    .search-box input{width:100%}
+    /* Sticky bars */
+    .sticky-ui{top:52px}
+    .filter-wrap{padding:7px 12px;gap:6px}
+    /* Filter tags — always visible, scroll horizontal */
+    .filter-tags{flex-wrap:nowrap;overflow-x:auto}
+    .ftag{font-size:10px;padding:4px 9px;flex-shrink:0}
+    /* Search box — constrained so page never overflows */
+    .search-box{flex-shrink:1;min-width:0;max-width:130px;margin-left:auto}
+    .search-box input{width:100%;min-width:0;font-size:11px;padding:6px 8px 6px 26px}
   }
   </style>
 
@@ -572,6 +579,22 @@
   .warn-box{background:color-mix(in srgb,var(--warn) 8%,var(--bg2));border-radius:12px;padding:14px 16px;border-left:3px solid var(--warn);font-size:.83rem;color:var(--text);line-height:1.65;margin-bottom:4px}
   /* disclaimer */
   .modal-disclaimer{margin-top:8px;font-size:.7rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;line-height:1.6;font-style:italic}
+
+  /* ── SCROLL TO TOP BUTTON ── */
+  .scroll-top{
+    position:fixed;bottom:28px;right:24px;z-index:500;
+    width:44px;height:44px;border-radius:50%;
+    background:var(--text);color:var(--card);
+    border:none;cursor:pointer;
+    font-size:18px;font-weight:700;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 20px rgba(0,0,0,.25);
+    opacity:0;pointer-events:none;
+    transform:translateY(12px);
+    transition:opacity .25s,transform .25s;
+  }
+  .scroll-top.visible{opacity:1;pointer-events:all;transform:translateY(0)}
+  .scroll-top:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
   /* ── CALCULADORA ── */
   #page-calc .calc-wrap{max-width:960px;margin:0 auto;padding:0 20px 60px}
   #page-calc .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -688,7 +711,8 @@
   </div>
 
   <!-- FILTROS -->
-  <!-- ── SECTION NAV BAR ── -->
+  <!-- ── UNIFIED STICKY UI ── -->
+  <div class="sticky-ui">
   <nav class="section-nav" id="sectionNav">
     <div class="section-nav-inner">
       <button class="snav-btn active" onclick="scrollToSection('sec-recovery')"><span class="snav-icon">🔬</span>Recuperação</button>
@@ -727,6 +751,7 @@
       <input type="text" id="psearch" placeholder="Buscar peptídeo…">
     </div>
   </div>
+  </div><!-- /sticky-ui -->
 
   <!-- GRID CARDS -->
   <div class="grid-wrap">
@@ -1845,6 +1870,11 @@
   </div>
 
 
+
+  <!-- ── SCROLL TO TOP ── -->
+  <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">
+    ↑
+  </button>
   <div class="site-footer">
     <div>© AURA | Peptides — Conteúdo educativo. Não é aconselhamento médico.</div>
     <div class="links">
@@ -3061,6 +3091,12 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
   }
 
   // Highlight active section on scroll
+  // Scroll to top button visibility
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+  window.addEventListener('scroll', () => {
+    if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+  }, {passive:true});
+
   window.addEventListener('scroll', () => {
     const ids = ['sec-recovery','sec-gh','sec-cutting','sec-glp1','sec-cognitivo',
                  'sec-sono','sec-imune','sec-antiaging','sec-hormonal',
