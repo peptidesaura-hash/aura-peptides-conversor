@@ -62,7 +62,7 @@
     backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);
     height:56px;
-    display:flex;align-items:center;
+    display:flex;align-items:center;justify-content:space-between;
     padding:0 24px;gap:0;
     transition:background .25s,border-color .25s;
   }
@@ -79,7 +79,7 @@
     padding:4px;background:var(--card);
   }
   .brand-name{
-    font-size:13px;font-weight:700;letter-spacing:.2px;
+    font-size:16px;font-weight:800;letter-spacing:.3px;
     white-space:nowrap;
   }
   .brand-sep{
@@ -165,6 +165,30 @@
   ════════════════════════════════ */
 
   /* HERO */
+
+  /* ── PAGE TABS (inside hero) ── */
+  .page-tabs{
+    display:flex;gap:6px;margin-bottom:28px;
+  }
+  .ptab{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:8px 18px;border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;color:var(--muted);
+    font-family:var(--font);font-size:12.5px;font-weight:600;
+    cursor:pointer;transition:all .18s;white-space:nowrap;
+  }
+  .ptab:hover{border-color:var(--text);color:var(--text)}
+  .ptab.active{
+    background:var(--text);border-color:var(--text);color:var(--card);
+  }
+  .ptab .calc-pill{
+    background:color-mix(in srgb,var(--card) 20%,transparent);
+    color:currentColor;border-color:color-mix(in srgb,currentColor 30%,transparent);
+    font-size:10px;padding:2px 7px;
+  }
+  .ptab-icon{font-size:13px;line-height:1}
+
   .hero{
     max-width:1100px;margin:0 auto;
     padding:56px 24px 40px;
@@ -655,19 +679,6 @@
     <img class="logo-img" src="logo-aura-vertical.png" alt="AURA">
     <span class="brand-name">AURA | Peptides</span>
   </a>
-  <div class="brand-sep"></div>
-
-  <div class="nav-tabs">
-    <button class="nav-tab active" data-tab="guia">
-      <span class="tab-icon">◈</span>
-      <span>Guia de Peptídeos</span>
-    </button>
-    <button class="nav-tab" data-tab="calc">
-      <span class="tab-icon">⊙</span>
-      <span>Calculadora de Dosagens</span>
-      <span class="calc-pill">mg → UI</span>
-    </button>
-  </div>
 
   <div class="bar-right">
     <div class="theme-btn" id="themeToggle">
@@ -684,6 +695,15 @@
 
   <!-- HERO -->
   <div class="hero">
+    <div class="page-tabs">
+      <button class="ptab active" data-tab="guia">
+        <span class="ptab-icon">◈</span>Guia de Peptídeos
+      </button>
+      <button class="ptab" data-tab="calc">
+        <span class="ptab-icon">⊙</span>Calculadora de Dosagens
+        <span class="calc-pill">mg → UI</span>
+      </button>
+    </div>
     <div class="hero-eyebrow">Base de Peptídeos — AURA</div>
     <h1>Guia de<br><em>Peptídeos</em></h1>
     <p class="hero-desc">Informações claras e diretas sobre os principais peptídeos utilizados em protocolos de performance, recuperação e biohacking — mecanismos, benefícios, dosagens e sinergias.</p>
@@ -715,19 +735,19 @@
   <div class="sticky-ui">
   <nav class="section-nav" id="sectionNav">
     <div class="section-nav-inner">
-      <button class="snav-btn active" onclick="scrollToSection('sec-recovery')"><span class="snav-icon">🔬</span>Recuperação</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-gh')"><span class="snav-icon">⚡</span>GH & Performance</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-cutting')"><span class="snav-icon">🔥</span>Cutting</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-glp1')"><span class="snav-icon">💊</span>GLP-1</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-cognitivo')"><span class="snav-icon">🧠</span>Cognitivo</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-sono')"><span class="snav-icon">🌙</span>Sono</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-imune')"><span class="snav-icon">🛡</span>Imune</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-antiaging')"><span class="snav-icon">⏳</span>Anti-Aging</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-hormonal')"><span class="snav-icon">⚗</span>Hormonal</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-bioreguladores')"><span class="snav-icon">🧬</span>Bioreguladores</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-lipo')"><span class="snav-icon">✨</span>Lipo Blends</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-estetica')"><span class="snav-icon">💎</span>Estética</button>
-      <button class="snav-btn" onclick="scrollToSection('sec-suprimentos')"><span class="snav-icon">🧪</span>Suprimentos</button>
+      <button class="snav-btn active" data-snav="all"><span class="snav-icon">🔬</span>Todos</button>
+      <button class="snav-btn" data-snav="recovery"><span class="snav-icon">🩹</span>Recuperação</button>
+      <button class="snav-btn" data-snav="bulking"><span class="snav-icon">⚡</span>GH & Performance</button>
+      <button class="snav-btn" data-snav="cutting"><span class="snav-icon">🔥</span>Cutting</button>
+      <button class="snav-btn" data-snav="glp1"><span class="snav-icon">💊</span>GLP-1</button>
+      <button class="snav-btn" data-snav="cognitivo"><span class="snav-icon">🧠</span>Cognitivo</button>
+      <button class="snav-btn" data-snav="sono"><span class="snav-icon">🌙</span>Sono</button>
+      <button class="snav-btn" data-snav="imune"><span class="snav-icon">🛡</span>Imune</button>
+      <button class="snav-btn" data-snav="longevidade"><span class="snav-icon">⏳</span>Anti-Aging</button>
+      <button class="snav-btn" data-snav="hormonal"><span class="snav-icon">⚗</span>Hormonal</button>
+      <button class="snav-btn" data-snav="bioreguladores"><span class="snav-icon">🧬</span>Bioreguladores</button>
+      <button class="snav-btn" data-snav="estetica"><span class="snav-icon">💎</span>Estética</button>
+      <button class="snav-btn" data-snav="suprimentos"><span class="snav-icon">🧪</span>Suprimentos</button>
     </div>
   </nav>
 
@@ -1024,84 +1044,84 @@
       <!-- ═══════════════ GLP-1 / EMAGRECIMENTO ═══════════════ -->
       <div class="pc-section-label" id="sec-glp1">GLP-1 e Metabólicos</div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Semaglutide GLP-1 Ozempic" onclick="openModal('semaglutide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Semaglutide GLP-1 Ozempic" onclick="openModal('semaglutide')">
         <div class="pc-top"><div class="pc-name">Semaglutide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">GLP-1 agonista semanal — o emagrecimento mais estudado e comprovado da atualidade.</p>
         <div class="pc-tags"><span class="ptag">GLP-1</span><span class="ptag">Saciedade</span><span class="ptag">Glicemia</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">0,25 – 2,4 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Tirzepatide GIP GLP-1 Mounjaro" onclick="openModal('tirzepatide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Tirzepatide GIP GLP-1 Mounjaro" onclick="openModal('tirzepatide')">
         <div class="pc-top"><div class="pc-name">Tirzepatide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Duplo agonista GIP + GLP-1 — emagrecimento superior ao Semaglutide em estudos.</p>
         <div class="pc-tags"><span class="ptag">GIP + GLP-1</span><span class="ptag">Diabetes</span><span class="ptag">Emagrecimento</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">2,5 – 15 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Retatrutide triplo agonista GLP-1 GIP glucagon" onclick="openModal('retatrutide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Retatrutide triplo agonista GLP-1 GIP glucagon" onclick="openModal('retatrutide')">
         <div class="pc-top"><div class="pc-name">Retatrutide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Triplo agonista GLP-1 + GIP + Glucagon — próxima geração do emagrecimento metabólico.</p>
         <div class="pc-tags"><span class="ptag">Triplo agonista</span><span class="ptag">Gordura máxima</span><span class="ptag">Nova geração</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">1 – 12 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Cagrilintide amilina análogo saciedade" onclick="openModal('cagrilintide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Cagrilintide amilina análogo saciedade" onclick="openModal('cagrilintide')">
         <div class="pc-top"><div class="pc-name">Cagrilintide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Análogo de longa duração da amilina — saciedade potente e controle glicêmico.</p>
         <div class="pc-tags"><span class="ptag">Amilina</span><span class="ptag">Saciedade</span><span class="ptag">Semanal</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">2 – 20 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="CagriSema Cagrilintide Semaglutide combo" onclick="openModal('cagrisema')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="CagriSema Cagrilintide Semaglutide combo" onclick="openModal('cagrisema')">
         <div class="pc-top"><div class="pc-name">CagriSema (Combo)</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Cagrilintide + Semaglutide — o combo incretínico mais potente da atualidade.</p>
         <div class="pc-tags"><span class="ptag">Combo GLP-1</span><span class="ptag">Dupla saciedade</span><span class="ptag">Metabólico</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Combo</div><div class="pc-dose-val">Semanal</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Retatrutide Cagrilintide Combo" onclick="openModal('retacagri')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Retatrutide Cagrilintide Combo" onclick="openModal('retacagri')">
         <div class="pc-top"><div class="pc-name">Retatrutide + Cagrilintide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span></div></div>
         <p class="pc-tagline">Combinação triplo agonista + amilina — emagrecimento de nova geração absoluto.</p>
         <div class="pc-tags"><span class="ptag">Combo avançado</span><span class="ptag">Máximo emagrecimento</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Combo</div><div class="pc-dose-val">Semanal</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Liraglutide GLP-1 Victoza" onclick="openModal('liraglutide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Liraglutide GLP-1 Victoza" onclick="openModal('liraglutide')">
         <div class="pc-top"><div class="pc-name">Liraglutide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">GLP-1 diário clássico — controle de apetite e glicemia com perfil bem estabelecido.</p>
         <div class="pc-tags"><span class="ptag">GLP-1 diário</span><span class="ptag">Saciedade</span><span class="ptag">Clássico</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">0,6 – 3 mg/dia</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Dulaglutide GLP-1 semanal Trulicity" onclick="openModal('dulaglutide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Dulaglutide GLP-1 semanal Trulicity" onclick="openModal('dulaglutide')">
         <div class="pc-top"><div class="pc-name">Dulaglutide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">GLP-1 semanal de segunda geração — emagrecimento e controle glicêmico duradouros.</p>
         <div class="pc-tags"><span class="ptag">GLP-1 semanal</span><span class="ptag">Diabetes T2</span><span class="ptag">Saciedade</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">0,75 – 1,5 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Mazdutide GLP-1 GCG biagonista" onclick="openModal('mazdutide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Mazdutide GLP-1 GCG biagonista" onclick="openModal('mazdutide')">
         <div class="pc-top"><div class="pc-name">Mazdutide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span></div></div>
         <p class="pc-tagline">Biagonista GLP-1 + Glucagon — queima de gordura aumentada pela via glucagon.</p>
         <div class="pc-tags"><span class="ptag">GLP-1 + GCG</span><span class="ptag">Biagonista</span><span class="ptag">Termogênico</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">5 – 20 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Survodutide biagonista GLP-1 glucagon" onclick="openModal('survodutide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Survodutide biagonista GLP-1 glucagon" onclick="openModal('survodutide')">
         <div class="pc-top"><div class="pc-name">Survodutide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span></div></div>
         <p class="pc-tagline">Biagonista de próxima geração — máxima termogênese e perda de gordura combinadas.</p>
         <div class="pc-tags"><span class="ptag">Biagonista</span><span class="ptag">NASH</span><span class="ptag">Emagrecimento</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">5 – 10 mg/semana</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="Pramlintide amilina saciedade" onclick="openModal('pramlintide')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="Pramlintide amilina saciedade" onclick="openModal('pramlintide')">
         <div class="pc-top"><div class="pc-name">Pramlintide</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Análogo da amilina — retarda o esvaziamento gástrico e controla saciedade pós-refeição.</p>
         <div class="pc-tags"><span class="ptag">Amilina</span><span class="ptag">Pós-prandial</span><span class="ptag">Glicemia</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">30 – 120 mcg/refeição</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting hormonal" data-name="GLP-1 peptídeo saciedade" onclick="openModal('glp1')">
+      <div class="pcard" data-cats="cutting hormonal glp1" data-name="GLP-1 peptídeo saciedade" onclick="openModal('glp1')">
         <div class="pc-top"><div class="pc-name">GLP-1</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Peptídeo nativo GLP-1 — saciedade, glicemia e proteção cardiovascular naturais.</p>
         <div class="pc-tags"><span class="ptag">GLP-1 nativo</span><span class="ptag">Saciedade</span><span class="ptag">Cardio</span></div>
@@ -1427,217 +1447,217 @@
       <!-- ═══════════════ BIOREGULADORES RUSSOS ═══════════════ -->
       <div class="pc-section-label" id="sec-bioreguladores">Bioreguladores Russos (Khavinson Peptides)</div>
 
-      <div class="pcard" data-cats="longevidade imune" data-name="Vilon peptídeo timo bioregulador" onclick="openModal('vilon')">
+      <div class="pcard" data-cats="longevidade imune bioreguladores" data-name="Vilon peptídeo timo bioregulador" onclick="openModal('vilon')">
         <div class="pc-top"><div class="pc-name">Vilon</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-imn">Imune</span></div></div>
         <p class="pc-tagline">Dipeptídeo do timo — imunomodulação e anti-aging pelo Dr. Khavinson.</p>
         <div class="pc-tags"><span class="ptag">Timo</span><span class="ptag">Khavinson</span><span class="ptag">Imunidade</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo sazonal</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade sono" data-name="Pinealon glândula pineal melatonina longevidade" onclick="openModal('pinealon')">
+      <div class="pcard" data-cats="longevidade sono bioreguladores" data-name="Pinealon glândula pineal melatonina longevidade" onclick="openModal('pinealon')">
         <div class="pc-top"><div class="pc-name">Pinealon</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-sono">Sono</span></div></div>
         <p class="pc-tagline">Bioregulador da pineal — restaura ritmo circadiano, melatonina e neuroprotege.</p>
         <div class="pc-tags"><span class="ptag">Pineal</span><span class="ptag">Melatonina</span><span class="ptag">Neuroproteção</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo anual</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Livagen fígado hepático bioregulador" onclick="openModal('livagen')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Livagen fígado hepático bioregulador" onclick="openModal('livagen')">
         <div class="pc-top"><div class="pc-name">Livagen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador hepático — restaura função do fígado e metabolismo de lipoproteínas.</p>
         <div class="pc-tags"><span class="ptag">Fígado</span><span class="ptag">Hepático</span><span class="ptag">Lipídeos</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Vesugen vasos sanguíneos endotélio bioregulador" onclick="openModal('vesugen')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Vesugen vasos sanguíneos endotélio bioregulador" onclick="openModal('vesugen')">
         <div class="pc-top"><div class="pc-name">Vesugen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador vascular — saúde endotelial, elasticidade arterial e longevidade cardiovascular.</p>
         <div class="pc-tags"><span class="ptag">Endotélio</span><span class="ptag">Vascular</span><span class="ptag">Cardiovascular</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade imune" data-name="Cardiogen coração bioregulador cardíaco" onclick="openModal('cardiogen')">
+      <div class="pcard" data-cats="longevidade imune bioreguladores" data-name="Cardiogen coração bioregulador cardíaco" onclick="openModal('cardiogen')">
         <div class="pc-top"><div class="pc-name">Cardiogen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-imn">Imune</span></div></div>
         <p class="pc-tagline">Bioregulador cardíaco — suporte ao miocárdio, função cardíaca e longevidade do coração.</p>
         <div class="pc-tags"><span class="ptag">Coração</span><span class="ptag">Miocárdio</span><span class="ptag">Bioregulador</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade imune" data-name="Bronchogen pulmão bioregulador respiratório" onclick="openModal('bronchogen')">
+      <div class="pcard" data-cats="longevidade imune bioreguladores" data-name="Bronchogen pulmão bioregulador respiratório" onclick="openModal('bronchogen')">
         <div class="pc-top"><div class="pc-name">Bronchogen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-imn">Imune</span></div></div>
         <p class="pc-tagline">Bioregulador pulmonar — restaura epitélio brônquico e função respiratória.</p>
         <div class="pc-tags"><span class="ptag">Pulmão</span><span class="ptag">Brônquio</span><span class="ptag">Respiração</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade imune" data-name="Chonluten pulmão brônquio bioregulador" onclick="openModal('chonluten')">
+      <div class="pcard" data-cats="longevidade imune bioreguladores" data-name="Chonluten pulmão brônquio bioregulador" onclick="openModal('chonluten')">
         <div class="pc-top"><div class="pc-name">Chonluten</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador brônquico — tripeptídeo pulmonar para saúde respiratória e longevidade.</p>
         <div class="pc-tags"><span class="ptag">Brônquio</span><span class="ptag">Tripeptídeo</span><span class="ptag">Pulmão</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Cartalax cartilagem articulação bioregulador" onclick="openModal('cartalax')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Cartalax cartilagem articulação bioregulador" onclick="openModal('cartalax')">
         <div class="pc-top"><div class="pc-name">Cartalax</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Bioregulador da cartilagem — regenera tecido cartilaginoso e reverte artrose.</p>
         <div class="pc-tags"><span class="ptag">Cartilagem</span><span class="ptag">Artrose</span><span class="ptag">Articulação</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Pancragen pâncreas bioregulador insulina" onclick="openModal('pancragen')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Pancragen pâncreas bioregulador insulina" onclick="openModal('pancragen')">
         <div class="pc-top"><div class="pc-name">Pancragen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador pancreático — restaura função das ilhotas de Langerhans e insulina.</p>
         <div class="pc-tags"><span class="ptag">Pâncreas</span><span class="ptag">Insulina</span><span class="ptag">Glicemia</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Crystagen timo cristalino olho bioregulador" onclick="openModal('crystagen')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Crystagen timo cristalino olho bioregulador" onclick="openModal('crystagen')">
         <div class="pc-top"><div class="pc-name">Crystagen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador do cristalino — saúde ocular, prevenção de catarata e longevidade visual.</p>
         <div class="pc-tags"><span class="ptag">Olho</span><span class="ptag">Cristalino</span><span class="ptag">Visão</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Testagen testículo bioregulador androgênios" onclick="openModal('testagen')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Testagen testículo bioregulador androgênios" onclick="openModal('testagen')">
         <div class="pc-top"><div class="pc-name">Testagen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador gonadal masculino — restaura função testicular e produção de androgênios.</p>
         <div class="pc-tags"><span class="ptag">Testículo</span><span class="ptag">Testosterona</span><span class="ptag">Hormonal</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Prostamax próstata bioregulador masculino" onclick="openModal('prostamax')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Prostamax próstata bioregulador masculino" onclick="openModal('prostamax')">
         <div class="pc-top"><div class="pc-name">Prostamax</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador prostático — saúde da próstata, fluxo urinário e longevidade masculina.</p>
         <div class="pc-tags"><span class="ptag">Próstata</span><span class="ptag">Masculino</span><span class="ptag">Urinário</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Retinalamin retina olho bioregulador" onclick="openModal('retinalamin')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Retinalamin retina olho bioregulador" onclick="openModal('retinalamin')">
         <div class="pc-top"><div class="pc-name">Retinalamin</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador retiniano — restaura retina, melhora acuidade visual e previne degeneração.</p>
         <div class="pc-tags"><span class="ptag">Retina</span><span class="ptag">Visão</span><span class="ptag">Degeneração</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Normoftal olho norma oftalmológico bioregulador" onclick="openModal('normoftal')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Normoftal olho norma oftalmológico bioregulador" onclick="openModal('normoftal')">
         <div class="pc-top"><div class="pc-name">Normoftal</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador ocular — saúde dos tecidos oculares e proteção contra envelhecimento visual.</p>
         <div class="pc-tags"><span class="ptag">Ocular</span><span class="ptag">Saúde visual</span><span class="ptag">Longevidade</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Endoluten pineal epifise longevidade sono" onclick="openModal('endoluten')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Endoluten pineal epifise longevidade sono" onclick="openModal('endoluten')">
         <div class="pc-top"><div class="pc-name">Endoluten</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-sono">Sono</span></div></div>
         <p class="pc-tagline">Bioregulador epifisário — restaura produção de melatonina e ritmo circadiano.</p>
         <div class="pc-tags"><span class="ptag">Epífise</span><span class="ptag">Melatonina</span><span class="ptag">Circadiano</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Ovagen ovário feminino bioregulador" onclick="openModal('ovagen')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Ovagen ovário feminino bioregulador" onclick="openModal('ovagen')">
         <div class="pc-top"><div class="pc-name">Ovagen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador ovariano — restaura função ovariana, ciclo e saúde hormonal feminina.</p>
         <div class="pc-tags"><span class="ptag">Ovário</span><span class="ptag">Hormônio feminino</span><span class="ptag">Ciclo</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Glandokort adrenal cortisol suprarrenal bioregulador" onclick="openModal('glandokort')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Glandokort adrenal cortisol suprarrenal bioregulador" onclick="openModal('glandokort')">
         <div class="pc-top"><div class="pc-name">Glandokort</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador adrenal — restaura função da glândula suprarrenal e eixo do estresse.</p>
         <div class="pc-tags"><span class="ptag">Suprarrenal</span><span class="ptag">Cortisol</span><span class="ptag">Estresse</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Gotratix músculo bioregulador massa muscular" onclick="openModal('gotratix')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Gotratix músculo bioregulador massa muscular" onclick="openModal('gotratix')">
         <div class="pc-top"><div class="pc-name">Gotratix</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-bulk">Bulking</span></div></div>
         <p class="pc-tagline">Bioregulador muscular — mantém massa magra no envelhecimento, anti-sarcopenia.</p>
         <div class="pc-tags"><span class="ptag">Sarcopenia</span><span class="ptag">Massa muscular</span><span class="ptag">Envelhecimento</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Sigumir articulação cartilagem osso bioregulador" onclick="openModal('sigumir')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Sigumir articulação cartilagem osso bioregulador" onclick="openModal('sigumir')">
         <div class="pc-top"><div class="pc-name">Sigumir</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Bioregulador osteoarticular — osso, cartilagem e articulações com abordagem sistêmica.</p>
         <div class="pc-tags"><span class="ptag">Osso</span><span class="ptag">Articulação</span><span class="ptag">Cartilagem</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Svetinorm fígado hepático longevidade bioregulador" onclick="openModal('svetinorm')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Svetinorm fígado hepático longevidade bioregulador" onclick="openModal('svetinorm')">
         <div class="pc-top"><div class="pc-name">Svetinorm</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador hepático — restaura função do fígado e metabolismo lipídico avançado.</p>
         <div class="pc-tags"><span class="ptag">Fígado</span><span class="ptag">Metabolismo</span><span class="ptag">Lipídeos</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Thyreogen tireoide bioregulador hormônio tireoidiano" onclick="openModal('thyreogen')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Thyreogen tireoide bioregulador hormônio tireoidiano" onclick="openModal('thyreogen')">
         <div class="pc-top"><div class="pc-name">Thyreogen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador da tireoide — restaura função tireoidiana e metabolismo basal.</p>
         <div class="pc-tags"><span class="ptag">Tireoide</span><span class="ptag">T3/T4</span><span class="ptag">Metabolismo</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Ventfort vasos sanguíneos bioregulador" onclick="openModal('ventfort')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Ventfort vasos sanguíneos bioregulador" onclick="openModal('ventfort')">
         <div class="pc-top"><div class="pc-name">Ventfort</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador vascular — restaura parede dos vasos e circulação periférica.</p>
         <div class="pc-tags"><span class="ptag">Vasos</span><span class="ptag">Circulação</span><span class="ptag">Aterosclerose</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Vesilut rim renal urinário bioregulador" onclick="openModal('vesilut')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Vesilut rim renal urinário bioregulador" onclick="openModal('vesilut')">
         <div class="pc-top"><div class="pc-name">Vesilut</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador renal — restaura função dos rins e saúde do sistema urinário.</p>
         <div class="pc-tags"><span class="ptag">Rim</span><span class="ptag">Renal</span><span class="ptag">Urinário</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Pielotax rim tubular renal bioregulador" onclick="openModal('pielotax')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Pielotax rim tubular renal bioregulador" onclick="openModal('pielotax')">
         <div class="pc-top"><div class="pc-name">Pielotax</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span></div></div>
         <p class="pc-tagline">Bioregulador renal tubular — proteção dos néfrons e função de filtração renal.</p>
         <div class="pc-tags"><span class="ptag">Néfron</span><span class="ptag">Filtração</span><span class="ptag">Renal</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade imune" data-name="Vladonix timo imune bioregulador longevidade" onclick="openModal('vladonix')">
+      <div class="pcard" data-cats="longevidade imune bioreguladores" data-name="Vladonix timo imune bioregulador longevidade" onclick="openModal('vladonix')">
         <div class="pc-top"><div class="pc-name">Vladonix</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-imn">Imune</span></div></div>
         <p class="pc-tagline">Bioregulador tímico peptídico — imunomodulação anti-aging de ação sistêmica.</p>
         <div class="pc-tags"><span class="ptag">Timo</span><span class="ptag">Imunidade</span><span class="ptag">Anti-aging</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade" data-name="Bonomarlot medula óssea bioregulador hematopoiese" onclick="openModal('bonomarlot')">
+      <div class="pcard" data-cats="longevidade bioreguladores" data-name="Bonomarlot medula óssea bioregulador hematopoiese" onclick="openModal('bonomarlot')">
         <div class="pc-top"><div class="pc-name">Bonomarlot</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-imn">Imune</span></div></div>
         <p class="pc-tagline">Bioregulador da medula óssea — hematopoiese e produção celular sanguínea.</p>
         <div class="pc-tags"><span class="ptag">Medula</span><span class="ptag">Hematopoiese</span><span class="ptag">Sangue</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Bonothyrk tireoide paratireoide bioregulador" onclick="openModal('bonothyrk')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Bonothyrk tireoide paratireoide bioregulador" onclick="openModal('bonothyrk')">
         <div class="pc-top"><div class="pc-name">Bonothyrk</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador da paratireoide — regulação do cálcio, osso e metabolismo mineral.</p>
         <div class="pc-tags"><span class="ptag">Paratireoide</span><span class="ptag">Cálcio</span><span class="ptag">Osso</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Libidon próstata libido bioregulador masculino" onclick="openModal('libidon')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Libidon próstata libido bioregulador masculino" onclick="openModal('libidon')">
         <div class="pc-top"><div class="pc-name">Libidon</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador prostático e de libido — saúde sexual masculina e função gonadal.</p>
         <div class="pc-tags"><span class="ptag">Próstata</span><span class="ptag">Libido</span><span class="ptag">Sexual</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Testoluten testículo androgênio bioregulador" onclick="openModal('testoluten')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Testoluten testículo androgênio bioregulador" onclick="openModal('testoluten')">
         <div class="pc-top"><div class="pc-name">Testoluten</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador gonadal avançado — restaura função testicular e produção de androgênios.</p>
         <div class="pc-tags"><span class="ptag">Testículo</span><span class="ptag">Androgênio</span><span class="ptag">Hormonal</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade hormonal" data-name="Zhenoluten ovário feminino bioregulador" onclick="openModal('zhenoluten')">
+      <div class="pcard" data-cats="longevidade hormonal bioreguladores" data-name="Zhenoluten ovário feminino bioregulador" onclick="openModal('zhenoluten')">
         <div class="pc-top"><div class="pc-name">Zhenoluten</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Bioregulador ovariano feminino — saúde hormonal e ciclo reprodutivo feminino.</p>
         <div class="pc-tags"><span class="ptag">Ovário</span><span class="ptag">Feminino</span><span class="ptag">Ciclo</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">Ciclo específico</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="longevidade imune" data-name="Cortagen nervoso central bioregulador" onclick="openModal('cortagen')">
+      <div class="pcard" data-cats="longevidade imune bioreguladores" data-name="Cortagen nervoso central bioregulador" onclick="openModal('cortagen')">
         <div class="pc-top"><div class="pc-name">Cortagen</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-cog">Cognitivo</span></div></div>
         <p class="pc-tagline">Bioregulador do córtex cerebral — neuroproteção, cognição e saúde do SNC.</p>
         <div class="pc-tags"><span class="ptag">Córtex</span><span class="ptag">SNC</span><span class="ptag">Neuroproteção</span></div>
@@ -1744,28 +1764,28 @@
       <!-- ═══════════════ SUPRIMENTOS ═══════════════ -->
       <div class="pc-section-label" id="sec-suprimentos">Suprimentos e Solventes</div>
 
-      <div class="pcard" data-cats="blends" data-name="BAC Water Bacteriostatic Water água bacteriostática" onclick="openModal('bacwater')">
+      <div class="pcard" data-cats="blends suprimentos" data-name="BAC Water Bacteriostatic Water água bacteriostática" onclick="openModal('bacwater')">
         <div class="pc-top"><div class="pc-name">BAC Water</div><div class="pc-badges"><span class="badge b-bulk" style="background:#6b7280">Suprimento</span></div></div>
         <p class="pc-tagline">Água bacteriostática estéril — solvente padrão para reconstituição de peptídeos.</p>
         <div class="pc-tags"><span class="ptag">Reconstituição</span><span class="ptag">Estéril</span><span class="ptag">Benzil álcool</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Uso</div><div class="pc-dose-val">Solvente para peptídeos</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="blends" data-name="Acetic Acid ácido acético solvente peptídeo" onclick="openModal('aceticacid')">
+      <div class="pcard" data-cats="blends suprimentos" data-name="Acetic Acid ácido acético solvente peptídeo" onclick="openModal('aceticacid')">
         <div class="pc-top"><div class="pc-name">Acetic Acid</div><div class="pc-badges"><span class="badge b-bulk" style="background:#6b7280">Suprimento</span></div></div>
         <p class="pc-tagline">Ácido acético para reconstituição — solvente para peptídeos hidrofóbicos difíceis.</p>
         <div class="pc-tags"><span class="ptag">Solvente</span><span class="ptag">Hidrofóbicos</span><span class="ptag">pH</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Uso</div><div class="pc-dose-val">Diluído em água</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="imune longevidade" data-name="B12 vitamina cobalamina energia" onclick="openModal('b12')">
+      <div class="pcard" data-cats="imune longevidade suprimentos" data-name="B12 vitamina cobalamina energia" onclick="openModal('b12')">
         <div class="pc-top"><div class="pc-name">B12 (Cobalamina)</div><div class="pc-badges"><span class="badge b-lon">Longevidade</span><span class="badge b-imn">Imune</span></div></div>
         <p class="pc-tagline">Vitamina B12 injetável — energia, neuroproteção e formação de glóbulos vermelhos.</p>
         <div class="pc-tags"><span class="ptag">Energia</span><span class="ptag">Neurológico</span><span class="ptag">Hematopoiese</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">1000 mcg/dose</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cutting estetica" data-name="Lemon Bottle lipolítico injetável gordura localizada" onclick="openModal('lemonbottle')">
+      <div class="pcard" data-cats="cutting estetica suprimentos" data-name="Lemon Bottle lipolítico injetável gordura localizada" onclick="openModal('lemonbottle')">
         <div class="pc-top"><div class="pc-name">Lemon Bottle</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-est">Estética</span></div></div>
         <p class="pc-tagline">Lipolítico injetável estético — dissolução de gordura localizada com aplicação local.</p>
         <div class="pc-tags"><span class="ptag">Gordura localizada</span><span class="ptag">Estética</span><span class="ptag">Lipolítico</span></div>
@@ -1774,14 +1794,14 @@
 
 
       <!-- ── ALIASES / VARIANTES ── -->
-      <div class="pcard" data-cats="recovery bulking" data-name="BPC+TB Blend BPC-157 TB-500 recuperação regeneração combo" onclick="openModal('bpc_tb')">
+      <div class="pcard" data-cats="recovery bulking suprimentos" data-name="BPC+TB Blend BPC-157 TB-500 recuperação regeneração combo" onclick="openModal('bpc_tb')">
         <div class="pc-top"><div class="pc-name">BPC+TB Blend</div><div class="pc-badges"><span class="badge b-rec">Recovery</span><span class="badge b-blk">Bulking</span></div></div>
         <p class="pc-tagline">Blend sinérgico BPC-157 + TB-500 — protocolo dual de regeneração máxima.</p>
         <div class="pc-tags"><span class="ptag">Regeneração</span><span class="ptag">Tendão</span><span class="ptag">Sistêmico</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">500 mcg BPC + 2 mg TB</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="bulking hormonal" data-name="HGH 191AA hormônio crescimento somatotropina HGH (191AA)" onclick="openModal('hgh191')">
+      <div class="pcard" data-cats="bulking hormonal suprimentos" data-name="HGH 191AA hormônio crescimento somatotropina HGH (191AA)" onclick="openModal('hgh191')">
         <div class="pc-top"><div class="pc-name">HGH (191AA)</div><div class="pc-badges"><span class="badge b-blk">Bulking</span><span class="badge b-hor">Hormonal</span></div></div>
         <p class="pc-tagline">Hormônio do crescimento humano recombinante — 191 aminoácidos idênticos ao endógeno.</p>
         <div class="pc-tags"><span class="ptag">GH</span><span class="ptag">Anti-aging</span><span class="ptag">Composição corporal</span></div>
@@ -1795,28 +1815,28 @@
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">500 mg/dose IM</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="cognitivo neuro" data-name="P21 without Adamantane P21 sem adamantano nootrópico neuroplasticidade CNTF" onclick="openModal('p21')">
+      <div class="pcard" data-cats="cognitivo neuro suprimentos" data-name="P21 without Adamantane P21 sem adamantano nootrópico neuroplasticidade CNTF" onclick="openModal('p21')">
         <div class="pc-top"><div class="pc-name">P21 (without Adamantane)</div><div class="pc-badges"><span class="badge b-cog">Cognitivo</span></div></div>
         <p class="pc-tagline">P21 puro sem componente adamantano — neuroplasticidade e neurogênese via CNTF.</p>
         <div class="pc-tags"><span class="ptag">Neurogênese</span><span class="ptag">Memória</span><span class="ptag">CNTF</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">300 mcg/dia SC</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="glp1 metabolico cutting" data-name="Reta+Cagri Blend Retatrutide Cagrilintide combo emagrecimento obesidade" onclick="openModal('retacagri')">
+      <div class="pcard" data-cats="glp1 metabolico cutting suprimentos" data-name="Reta+Cagri Blend Retatrutide Cagrilintide combo emagrecimento obesidade" onclick="openModal('retacagri')">
         <div class="pc-top"><div class="pc-name">Reta+Cagri Blend</div><div class="pc-badges"><span class="badge b-glp">GLP-1</span><span class="badge b-cut">Cutting</span></div></div>
         <p class="pc-tagline">Retatrutide + Cagrilintide — 4 vias de perda de peso em uma formulação.</p>
         <div class="pc-tags"><span class="ptag">GLP-1/GIP/Glucagon</span><span class="ptag">Amilina</span><span class="ptag">Obesidade</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">2–5 mg/semana SC</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="recovery" data-name="TB500 Frag 17-23 TB-500 fragmento ativo sequência LKKTETQ regeneração" onclick="openModal('tbfrag')">
+      <div class="pcard" data-cats="recovery suprimentos" data-name="TB500 Frag 17-23 TB-500 fragmento ativo sequência LKKTETQ regeneração" onclick="openModal('tbfrag')">
         <div class="pc-top"><div class="pc-name">TB500 Frag 17-23</div><div class="pc-badges"><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Fragmento ativo LKKTETQ do TB-500 — sequência mínima de regeneração.</p>
         <div class="pc-tags"><span class="ptag">Regeneração</span><span class="ptag">Tendão</span><span class="ptag">Actina G</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Dosagem</div><div class="pc-dose-val">500 mcg 2×/semana SC</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="bulking hormonal cutting" data-name="Tesa+IPA Blend Tesamorelin Ipamorelin combo GH cutting composição corporal" onclick="openModal('tesaipa')">
+      <div class="pcard" data-cats="bulking hormonal cutting suprimentos" data-name="Tesa+IPA Blend Tesamorelin Ipamorelin combo GH cutting composição corporal" onclick="openModal('tesaipa')">
         <div class="pc-top"><div class="pc-name">Tesa+IPA Blend</div><div class="pc-badges"><span class="badge b-blk">Bulking</span><span class="badge b-cut">Cutting</span></div></div>
         <p class="pc-tagline">Tesamorelin + Ipamorelin — o combo de GH mais validado para composição corporal.</p>
         <div class="pc-tags"><span class="ptag">GHRH + GHRP</span><span class="ptag">Gordura visceral</span><span class="ptag">GH</span></div>
@@ -1824,42 +1844,42 @@
       </div>
 
       <!-- ── NOVOS BLENDS ── -->
-      <div class="pcard" data-cats="estetica recovery" data-name="BBG40 Beauty Blend G GHK-Cu colágeno rejuvenescimento pele anti-aging" onclick="openModal('bbg40')">
+      <div class="pcard" data-cats="estetica recovery suprimentos" data-name="BBG40 Beauty Blend G GHK-Cu colágeno rejuvenescimento pele anti-aging" onclick="openModal('bbg40')">
         <div class="pc-top"><div class="pc-name">BBG40</div><div class="pc-badges"><span class="badge b-est">Estética</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Beauty Blend G 40 mg — GHK-Cu + peptídeos reparadores para rejuvenescimento cutâneo.</p>
         <div class="pc-tags"><span class="ptag">Colágeno</span><span class="ptag">Anti-aging</span><span class="ptag">GHK-Cu</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Conteúdo</div><div class="pc-dose-val">40 mg total</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="estetica recovery" data-name="BBG50 Beauty Blend G GHK-Cu colágeno rejuvenescimento pele anti-aging" onclick="openModal('bbg50')">
+      <div class="pcard" data-cats="estetica recovery suprimentos" data-name="BBG50 Beauty Blend G GHK-Cu colágeno rejuvenescimento pele anti-aging" onclick="openModal('bbg50')">
         <div class="pc-top"><div class="pc-name">BBG50</div><div class="pc-badges"><span class="badge b-est">Estética</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Beauty Blend G 50 mg — formulação premium de GHK-Cu e peptídeos anti-aging dérmicos.</p>
         <div class="pc-tags"><span class="ptag">Colágeno</span><span class="ptag">Elastina</span><span class="ptag">GHK-Cu</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Conteúdo</div><div class="pc-dose-val">50 mg total</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="estetica recovery" data-name="BBG70 Beauty Blend G GHK-Cu colágeno rejuvenescimento pele anti-aging máximo" onclick="openModal('bbg70')">
+      <div class="pcard" data-cats="estetica recovery suprimentos" data-name="BBG70 Beauty Blend G GHK-Cu colágeno rejuvenescimento pele anti-aging máximo" onclick="openModal('bbg70')">
         <div class="pc-top"><div class="pc-name">BBG70</div><div class="pc-badges"><span class="badge b-est">Estética</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Beauty Blend G 70 mg — versão máxima com maior concentração de peptídeos de cobre.</p>
         <div class="pc-tags"><span class="ptag">Colágeno</span><span class="ptag">Elastina</span><span class="ptag">Angiogênese</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Conteúdo</div><div class="pc-dose-val">70 mg total</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="estetica recovery" data-name="GGH blend GHK-Cu TB-500 BPC-157 rejuvenescimento pele anti-aging glow" onclick="openModal('ggh')">
+      <div class="pcard" data-cats="estetica recovery suprimentos" data-name="GGH blend GHK-Cu TB-500 BPC-157 rejuvenescimento pele anti-aging glow" onclick="openModal('ggh')">
         <div class="pc-top"><div class="pc-name">GGH</div><div class="pc-badges"><span class="badge b-est">Estética</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">Blend GHK-Cu + GHK + peptídeos de reparo — protocolo de rejuvenescimento cutâneo avançado.</p>
         <div class="pc-tags"><span class="ptag">GHK-Cu</span><span class="ptag">Pele</span><span class="ptag">Colágeno</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Conteúdo</div><div class="pc-dose-val">402 mg total</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="estetica recovery imune" data-name="GKP Blend GHK-Cu KPV peptídeo anti-inflamatório rejuvenescimento" onclick="openModal('gkpblend')">
+      <div class="pcard" data-cats="estetica recovery imune suprimentos" data-name="GKP Blend GHK-Cu KPV peptídeo anti-inflamatório rejuvenescimento" onclick="openModal('gkpblend')">
         <div class="pc-top"><div class="pc-name">GKP Blend</div><div class="pc-badges"><span class="badge b-est">Estética</span><span class="badge b-rec">Recovery</span></div></div>
         <p class="pc-tagline">GHK-Cu + KPV + peptídeos ativos — anti-aging com controle inflamatório integrado.</p>
         <div class="pc-tags"><span class="ptag">GHK-Cu</span><span class="ptag">KPV</span><span class="ptag">Anti-inflamatório</span></div>
         <div class="pc-foot"><div><div class="pc-dose-lbl">Conteúdo</div><div class="pc-dose-val">70 mg total</div></div><span class="pc-arrow">→</span></div>
       </div>
 
-      <div class="pcard" data-cats="estetica cutting" data-name="SZ352 blend emagrecimento slimming estético composição corporal definição" onclick="openModal('sz352')">
+      <div class="pcard" data-cats="estetica cutting suprimentos" data-name="SZ352 blend emagrecimento slimming estético composição corporal definição" onclick="openModal('sz352')">
         <div class="pc-top"><div class="pc-name">SZ352</div><div class="pc-badges"><span class="badge b-cut">Cutting</span><span class="badge b-est">Estética</span></div></div>
         <p class="pc-tagline">Blend SZ 352 mg — formulação estético-metabólica para definição e composição corporal.</p>
         <div class="pc-tags"><span class="ptag">Lipolítico</span><span class="ptag">Composição corporal</span><span class="ptag">Blend</span></div>
@@ -1909,6 +1929,15 @@
 <!-- PÁGINA CALCULADORA -->
 <div class="page" id="page-calc">
   <div class="hero">
+    <div class="page-tabs">
+      <button class="ptab" data-tab="guia">
+        <span class="ptab-icon">◈</span>Guia de Peptídeos
+      </button>
+      <button class="ptab active" data-tab="calc">
+        <span class="ptab-icon">⊙</span>Calculadora de Dosagens
+        <span class="calc-pill">mg → UI</span>
+      </button>
+    </div>
     <div class="hero-eyebrow">AURA | Calculadora</div>
     <h1>Calculadora de<br><em>Dosagens</em></h1>
     <p class="hero-desc">Converta mg ou mcg em unidades de insulina. Selecione o produto ou insira manualmente.</p>
@@ -2075,12 +2104,13 @@
   });
 
   // ── TAB NAV ──
-  document.querySelectorAll('.nav-tab').forEach(btn => {
+  document.querySelectorAll('.ptab').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.ptab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('page-' + btn.dataset.tab).classList.add('active');
+      document.getElementById('page-' + tab).classList.add('active');
+      window.scrollTo({top:0, behavior:'instant'});
     });
   });
 
@@ -2095,6 +2125,19 @@
       if (show) vis++;
     });
     document.getElementById('count-vis').textContent = vis;
+    // Show section label only if it has at least one visible card after it
+    document.querySelectorAll('.pc-section-label').forEach(lbl => {
+      // find next sibling cards until next label
+      let el = lbl.nextElementSibling;
+      let hasVisible = false;
+      while (el && !el.classList.contains('pc-section-label')) {
+        if (el.classList.contains('pcard') && !el.classList.contains('hidden')) {
+          hasVisible = true; break;
+        }
+        el = el.nextElementSibling;
+      }
+      lbl.style.display = hasVisible ? '' : 'none';
+    });
   }
 
   function applySearch(q) {
@@ -2109,6 +2152,18 @@
       if (show) vis++;
     });
     document.getElementById('count-vis').textContent = vis;
+    // Show section label only if it has at least one visible card
+    document.querySelectorAll('.pc-section-label').forEach(lbl => {
+      let el = lbl.nextElementSibling;
+      let hasVisible = false;
+      while (el && !el.classList.contains('pc-section-label')) {
+        if (el.classList.contains('pcard') && !el.classList.contains('hidden')) {
+          hasVisible = true; break;
+        }
+        el = el.nextElementSibling;
+      }
+      lbl.style.display = hasVisible ? '' : 'none';
+    });
   }
 
   let activeFilter = 'all';
@@ -3073,43 +3128,46 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
     calcUpdate();
   }
 
-  // ── SECTION NAV ──
-  function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    // offset = section-nav (46px) + filter-wrap (44px) + nav (60px) + buffer
-    const offset = 160;
-    const top = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({top, behavior:'smooth'});
-    // mark active
-    document.querySelectorAll('.snav-btn').forEach(b => b.classList.remove('active'));
-    const idx = ['sec-recovery','sec-gh','sec-cutting','sec-glp1','sec-cognitivo',
-                 'sec-sono','sec-imune','sec-antiaging','sec-hormonal',
-                 'sec-bioreguladores','sec-lipo','sec-estetica','sec-suprimentos'].indexOf(id);
-    const btns = document.querySelectorAll('.snav-btn');
-    if(btns[idx]) btns[idx].classList.add('active');
-  }
+  // ── SECTION NAV — filter by category ──
+  document.querySelectorAll('.snav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.snav;
+      // Mark active snav
+      document.querySelectorAll('.snav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Sync ftag buttons
+      document.querySelectorAll('.ftag').forEach(b => {
+        b.classList.toggle('on', b.dataset.f === cat);
+      });
+      // Apply filter
+      activeFilter = cat;
+      const q = document.querySelector('.search-box input')?.value.trim().toLowerCase() || '';
+      if (q) applySearch(q); else applyFilter(cat);
+      // Section labels always visible
+      // Scroll to top of grid smoothly
+      const grid = document.getElementById('pgrid');
+      if (grid) {
+        const top = grid.getBoundingClientRect().top + window.scrollY - 165;
+        window.scrollTo({top, behavior:'smooth'});
+      }
+    });
+  });
 
-  // Highlight active section on scroll
-  // Scroll to top button visibility
+  // ftag clicks sync back to snav
+  document.querySelectorAll('.ftag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.f;
+      document.querySelectorAll('.snav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.snav === f);
+      });
+      // labels always visible
+    });
+  });
+
+  // Scroll-to-top button
   const scrollTopBtn = document.getElementById('scrollTopBtn');
   window.addEventListener('scroll', () => {
     if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
-  }, {passive:true});
-
-  window.addEventListener('scroll', () => {
-    const ids = ['sec-recovery','sec-gh','sec-cutting','sec-glp1','sec-cognitivo',
-                 'sec-sono','sec-imune','sec-antiaging','sec-hormonal',
-                 'sec-bioreguladores','sec-lipo','sec-estetica','sec-suprimentos'];
-    const offset = 180;
-    let current = 0;
-    ids.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el && el.getBoundingClientRect().top <= offset) current = i;
-    });
-    document.querySelectorAll('.snav-btn').forEach((b,i) => {
-      b.classList.toggle('active', i === current);
-    });
   }, {passive:true});
 
 </script>
