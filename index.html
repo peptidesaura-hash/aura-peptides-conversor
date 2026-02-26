@@ -2165,8 +2165,7 @@
     });
   }
 
-  // Init count
-  applyFilter('all');
+  // Init count — see init() at bottom of script
 
 const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bpc_tb", "GHK-Cu": "ghkcu", "AHK-Cu": "ahkcu", "KPV": "kpv", "LL-37": "ll37", "Ipamorelin": "ipamorelin", "Ipamorelin/CJC": "cjcipa", "CJC-1295 no DAC": "cjcnodac", "CJC-1295 DAC": "cjcdac", "GHRP-2": "ghrp2", "GHRP-6": "ghrp6", "Hexarelin": "hexarelin", "Sermorelin": "sermorelin", "Tesamorelin": "tesamorelin", "HGH 191AA": "hgh191", "IGF-1 LR3": "igf1lr3", "IGF-1 DES": "igf1des", "MGF": "mgf", "PEG-MGF": "pegmgf", "Follistatin": "follistatin", "AOD-9604": "aod9604", "HGH Fragment": "hghfrag", "Semaglutide": "semaglutide", "Tirzepatide": "tirzepatide", "Retatrutide": "retatrutide", "Cagrilintide": "cagrilintide", "Liraglutide": "liraglutide", "AICAR": "aicar", "SLUPP-3157": "slupp", "5-Amino-1MQ": "aminomq", "Semax": "semax", "NA Semax Amidate": "nasemax", "Selank": "selank", "NA Selank Amidate": "naselank", "P21": "p21", "Adamax": "adamax", "Cerebrolysin": "cerebrolysin", "Oxitocina": "oxytocin", "DSIP": "dsip", "TA-1": "ta1", "Thymalin": "thymalin", "VIP": "vip", "EPO": "epo", "Epithalon": "epithalon", "N-Acetyl Epithalon": "naepithalon", "FOXO4-DRI": "foxo4dri", "SS-31": "ss31", "MOTS-C": "motsc", "NAD+": "nad", "Humanin": "humanin", "Glutationa": "glutathione", "GHK-Cu (→ GLOW)": "glow", "KPV (→ KLOW)": "klow", "HCG": "hcg", "HMG": "hmg", "Gonadorelina": "gonadorelin", "PT-141": "pt141", "Melanotan II": "mt2", "Melanotan I": "mt1", "Kisspeptin": "kisspeptin", "Triptorelin": "triptorelin", "Thymalin e Vilon": "thymalin", "Cartalax": "cartalax", "BPC-157 e TB-500": "bpc_tb", "Sigumir": "sigumir", "Vesugen": "vesugen", "Cardiogen": "cardiogen", "Crystagen": "crystagen", "Cortagen": "cortagen", "Thyreogen": "thyreogen", "Epithalon e Pinealon": "epithalon", "Pinealon": "pinealon", "Testagen": "testagen", "Testoluten": "testoluten", "Livagen": "livagen", "Pancragen": "pancragen", "Gonadorelin": "gonadorelin", "Minoxidil (tópico)": "ptddbm", "PTD-DBM": "ptddbm", "L-Carnitina": "lcarnitine", "Metionina": "methionine", "Vitamina D3": "vitamind3", "Vladonix": "vladonix", "Bonomarlot": "bonomarlot", "Vilon": "vilon", "GABA Sleep Blend": "gabasleep", "Relax PM": "relaxpm", "Lipo-B": "lipob", "Prostamax": "prostamax", "Libidon": "libidon", "Zhenoluten": "zhenoluten", "Ovagen": "ovagen", "Retinalamin": "retinalamin", "Normoftal": "normoftal", "Ventfort": "ventfort", "Vesilut": "vesilut", "Bonothyrk": "bonothyrk", "Bronchogen": "bronchogen", "Chonluten": "chonluten", "Svetinorm": "svetinorm", "Glandokort": "glandokort", "Gotratix": "gotratix", "Teriparatide": "teriparatide"};
 
@@ -2922,11 +2921,59 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
     return 30;
   }
 
+  // Draw syringe tick marks (called on init and on syringe type change)
+  function drawTicks(maxUI) {
+    const ticksG = qs('ticks');
+    if (!ticksG) return;
+    const totalH = 258;
+    const bottomY = 354;
+    const ns = 'http://www.w3.org/2000/svg';
+    ticksG.innerHTML = '';
+
+    // Minor and major intervals per syringe type
+    let minorStep, majorStep;
+    if (maxUI <= 30) {        // 0.3 mL — minor every 1 UI, major every 5
+      minorStep = 1; majorStep = 5;
+    } else if (maxUI <= 50) { // 0.5 mL — minor every 2 UI, major every 10
+      minorStep = 2; majorStep = 10;
+    } else {                  // 1.0 mL — minor every 2 UI, major every 10
+      minorStep = 2; majorStep = 10;
+    }
+
+    for (let u = minorStep; u <= maxUI + 0.001; u = Math.round((u + minorStep) * 1000) / 1000) {
+      const isMaj = Math.round(u * 1000) % Math.round(majorStep * 1000) < 1;
+      const y = bottomY - Math.round((u / maxUI) * totalH);
+
+      // Tick line — minor shorter, major longer; both on the RIGHT side of barrel
+      const line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', isMaj ? 76 : 80);  // major ticks start further left
+      line.setAttribute('y1', y);
+      line.setAttribute('x2', 91);                // right edge inside barrel wall
+      line.setAttribute('y2', y);
+      line.setAttribute('stroke', 'currentColor');
+      line.setAttribute('stroke-width', isMaj ? '1.4' : '0.9');
+      line.setAttribute('opacity', isMaj ? '0.7' : '0.35');
+      ticksG.appendChild(line);
+
+      // Label for major ticks only
+      if (isMaj) {
+        const txt = document.createElementNS(ns, 'text');
+        txt.setAttribute('x', 74);
+        txt.setAttribute('y', y + 3);
+        txt.setAttribute('text-anchor', 'end');
+        txt.setAttribute('fill', 'currentColor');
+        txt.setAttribute('font-size', '8');
+        txt.setAttribute('opacity', '0.65');
+        txt.textContent = Number.isInteger(u) ? u : u.toFixed(1);
+        ticksG.appendChild(txt);
+      }
+    }
+  }
+
   function setSyringe(ui, maxUI){
     const svg = qs('syringeSvg');
     if(!svg) return;
-    const totalH = 258; // px in svg for full barrel
-    const topY = 96;
+    const totalH = 258;
     const bottomY = 354;
     const ratio = Math.min(Math.max(ui/maxUI, 0), 1);
     const fillH = Math.round(totalH * ratio);
@@ -2934,46 +2981,12 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
     const liq = qs('liquid');
     const plBase = qs('plungerBase');
     const plLabel = qs('plungerLabel');
-    const ticksG = qs('ticks');
     if(!liq) return;
     liq.setAttribute('y', fillY);
     liq.setAttribute('height', fillH);
     if(plBase) { plBase.setAttribute('y1', fillY); plBase.setAttribute('y2', fillY); }
-    if(plLabel) { plLabel.setAttribute('y', fillY - 5); plLabel.textContent = ui > 0 ? Math.round(ui) + ' UI' : ''; }
-    // draw ticks — minor + major with labels
-    if(ticksG){
-      ticksG.innerHTML = '';
-      // Define minor and major step based on syringe capacity
-      let minorStep, majorStep;
-      if(maxUI <= 30){       // 0.3mL syringe: minor=1, major=5
-        minorStep = 1; majorStep = 5;
-      } else if(maxUI <= 50){ // 0.5mL: minor=2, major=10
-        minorStep = 2; majorStep = 10;
-      } else {               // 1mL (100UI): minor=2, major=10
-        minorStep = 2; majorStep = 10;
-      }
-      const ns = 'http://www.w3.org/2000/svg';
-      for(let u = minorStep; u <= maxUI; u = Math.round((u + minorStep)*10)/10){
-        const y = bottomY - Math.round((u/maxUI)*totalH);
-        const isMaj = Math.round(u * 100) % Math.round(majorStep * 100) === 0;
-        const x1 = isMaj ? 88 : 91;
-        const line = document.createElementNS(ns,'line');
-        line.setAttribute('x1',x1); line.setAttribute('y1',y);
-        line.setAttribute('x2',93); line.setAttribute('y2',y);
-        line.setAttribute('stroke','currentColor');
-        line.setAttribute('stroke-width', isMaj ? '1.5' : '1');
-        line.setAttribute('opacity', isMaj ? '.65' : '.3');
-        ticksG.appendChild(line);
-        if(isMaj){
-          const txt = document.createElementNS(ns,'text');
-          txt.setAttribute('x',86); txt.setAttribute('y',y+3);
-          txt.setAttribute('text-anchor','end'); txt.setAttribute('fill','currentColor');
-          txt.setAttribute('font-size','8'); txt.setAttribute('opacity','.6');
-          txt.textContent = Number.isInteger(u) ? u : u.toFixed(1);
-          ticksG.appendChild(txt);
-        }
-      }
-    }
+    if(plLabel) { plLabel.setAttribute('y', fillY - 5); plLabel.textContent = ui > 0 ? ui.toFixed(1) + ' UI' : ''; }
+    drawTicks(maxUI);
   }
 
   function roundUI(exact, step, rule){
@@ -3017,9 +3030,9 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
       uiExact = (doseMg / concMgMl) * 100;
     }
 
-    const mlExact = doseMg / concMgMl;
+    const mlExact = doseMg / concMgMl;          // correct: volume in mL
     const uiRounded = roundUI(uiExact, roundStep, tie);
-    const mlRounded = (uiRounded / 100) * dilutionMl;
+    const mlRounded = uiRounded / 100;           // U-100: 1 mL = 100 UI always
 
     qs('uiExact').textContent = fmt(uiExact, 1) + ' UI';
     qs('uiExactSub').textContent = fmt(mlExact, 3) + ' mL';
@@ -3159,6 +3172,18 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
     if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
   }, {passive:true});
 
+
+  // ── INIT (runs after all functions are defined) ──
+  (function init() {
+    applyFilter('all');
+    const syrSelect = document.getElementById('syringeType');
+    if (syrSelect) {
+      drawTicks(syringeMaxUI(syrSelect.value));
+      syrSelect.addEventListener('change', () => {
+        drawTicks(syringeMaxUI(syrSelect.value));
+        calcUpdate();
+      });
+    }
+  })();
+
 </script>
-</body>
-</html>
