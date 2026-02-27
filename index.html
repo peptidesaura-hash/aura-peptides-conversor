@@ -2032,21 +2032,53 @@
         <div class="csyr-wrap">
           <div class="csyr-card">
             <p class="csec-title" style="margin-bottom:10px">Visual da seringa</p>
-            <svg id="syringeSvg" width="120" height="420" viewBox="0 0 120 420" style="display:block">
-              <rect x="0" y="0" width="120" height="420" fill="transparent"/>
-              <rect x="22" y="74" width="76" height="16" rx="8" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".9"/>
-              <rect x="40" y="8" width="40" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="2" opacity=".9"/>
-              <rect x="56" y="34" width="8" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
-              <rect x="28" y="90" width="64" height="270" rx="14" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".9"/>
-              <clipPath id="bClip"><rect x="34" y="96" width="52" height="258" rx="10"/></clipPath>
-              <rect id="liquid" x="34" y="354" width="52" height="0" fill="currentColor" opacity=".35" clip-path="url(#bClip)"/>
-              <rect x="44" y="360" width="32" height="14" rx="5" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".9"/>
-              <line x1="60" y1="374" x2="60" y2="404" stroke="currentColor" stroke-width="2.4" opacity=".9"/>
-              <polygon points="60,412 52,402 68,402" fill="currentColor" opacity=".9"/>
-              <g id="ticks"></g>
-              <line id="plungerBase" x1="28" y1="354" x2="92" y2="354" stroke="currentColor" stroke-width="2.6" opacity="1" stroke-dasharray="3 2"/>
-              <text id="plungerLabel" x="60" y="0" text-anchor="middle" fill="currentColor" font-size="10" opacity=".7">base</text>
-            </svg>
+            <div style="position:relative;display:inline-block">
+              <svg id="syringeSvg" width="120" height="420" viewBox="0 0 120 420" style="display:block">
+                <rect x="0" y="0" width="120" height="420" fill="transparent"/>
+                <rect x="22" y="74" width="76" height="16" rx="8" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".9"/>
+                <rect x="40" y="8" width="40" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="2" opacity=".9"/>
+                <rect x="56" y="34" width="8" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
+                <rect x="28" y="90" width="64" height="270" rx="14" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".9"/>
+                <clipPath id="bClip"><rect x="34" y="96" width="52" height="258" rx="10"/></clipPath>
+                <rect id="liquid" x="34" y="354" width="52" height="0" fill="currentColor" opacity=".35" clip-path="url(#bClip)"/>
+                <rect x="44" y="360" width="32" height="14" rx="5" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".9"/>
+                <line x1="60" y1="374" x2="60" y2="404" stroke="currentColor" stroke-width="2.4" opacity=".9"/>
+                <polygon points="60,412 52,402 68,402" fill="currentColor" opacity=".9"/>
+                <g id="ticks"></g>
+                <line id="plungerBase" x1="28" y1="354" x2="92" y2="354" stroke="currentColor" stroke-width="2.6" opacity="1" stroke-dasharray="3 2"/>
+              </svg>
+              <!-- External UI indicator — floats to the right of the syringe, follows plunger -->
+              <div id="uiIndicator" style="
+                display:none;
+                position:absolute;
+                left:124px;
+                top:0;
+                width:62px;
+              ">
+                <div id="uiIndicatorPin" style="
+                  position:absolute;
+                  display:flex;align-items:center;gap:4px;
+                  transform:translateY(-50%);
+                  white-space:nowrap;
+                ">
+                  <!-- horizontal connector line -->
+                  <div style="width:10px;height:1.5px;background:currentColor;opacity:.4;flex-shrink:0"></div>
+                  <!-- badge -->
+                  <div id="uiIndicatorBadge" style="
+                    background:var(--text);color:var(--card);
+                    border-radius:7px;
+                    padding:4px 8px;
+                    font-size:11px;font-weight:800;
+                    font-family:var(--mono);
+                    line-height:1.2;text-align:center;
+                    box-shadow:0 2px 8px rgba(0,0,0,.18);
+                  ">
+                    <div id="uiIndUI" style="font-size:12px">— UI</div>
+                    <div id="uiIndML" style="font-size:9px;opacity:.65;font-weight:600;margin-top:1px">— mL</div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="chint" style="margin-top:8px">Leia pela <strong>base do êmbolo</strong></div>
           </div>
           <div style="flex:1;min-width:160px">
@@ -2973,19 +3005,39 @@ const SYN_MAP = {"BPC-157": "bpc157", "TB-500": "tb500", "BPC-157 + TB-500": "bp
   function setSyringe(ui, maxUI){
     const svg = qs('syringeSvg');
     if(!svg) return;
-    const totalH = 258;
-    const bottomY = 354;
+    const totalH = 258;   // barrel height in px
+    const topY    = 96;   // barrel top Y in SVG coords
+    const bottomY = 354;  // barrel bottom Y
     const ratio = Math.min(Math.max(ui/maxUI, 0), 1);
     const fillH = Math.round(totalH * ratio);
     const fillY = bottomY - fillH;
-    const liq = qs('liquid');
+    const liq    = qs('liquid');
     const plBase = qs('plungerBase');
-    const plLabel = qs('plungerLabel');
     if(!liq) return;
     liq.setAttribute('y', fillY);
     liq.setAttribute('height', fillH);
     if(plBase) { plBase.setAttribute('y1', fillY); plBase.setAttribute('y2', fillY); }
-    if(plLabel) { plLabel.setAttribute('y', fillY - 5); plLabel.textContent = ui > 0 ? ui.toFixed(1) + ' UI' : ''; }
+
+    // External indicator — position alongside syringe
+    const indicator    = document.getElementById('uiIndicator');
+    const indicatorPin = document.getElementById('uiIndicatorPin');
+    const indUI        = document.getElementById('uiIndUI');
+    const indML        = document.getElementById('uiIndML');
+    if(indicator && indicatorPin) {
+      if(ui > 0) {
+        // Convert SVG y-coordinate to CSS top (SVG is 420px tall, viewBox 0-420)
+        const svgPx = 420;  // rendered height of SVG element
+        const topPct = fillY / 420;  // fraction from top
+        indicator.style.display = 'block';
+        indicator.style.height  = svgPx + 'px';
+        indicatorPin.style.top  = (fillY / 420 * 420) + 'px';  // px within the 420px container
+        const mlVal = ui / 100;
+        indUI.textContent = ui.toFixed(ui % 1 === 0 ? 0 : 1) + ' UI';
+        indML.textContent = mlVal.toFixed(3).replace('.', ',') + ' mL';
+      } else {
+        indicator.style.display = 'none';
+      }
+    }
     drawTicks(maxUI);
   }
 
